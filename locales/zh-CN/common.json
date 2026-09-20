@@ -1,0 +1,61 @@
+{
+  "intervention.trustCrossing.title": "HIL · 信任边界提醒",
+  "intervention.trustCrossing.body": "智能体即将引入：{entities}。\n以上条目在你配置的信任边界之外（状态：{status}）。\n这不是安全裁决——这是一个值得由你保留的决策点。建议快速确认：\n  • 什么数据会流向或存储于该服务？\n  • 凭据与密钥由谁控制？\n  • 会引入哪些权限与依赖？\n  • 是否存在厂商锁定、许可或迁移影响？\n由你决定：允许、拒绝，或先调查。\n永久信任：hil trust add {first} · 本会话静音：/hil mute",
+
+  "intervention.trustCrossingDenied.title": "HIL · 信任边界（决策待定）",
+  "intervention.trustCrossingDenied.body": "此动作已暂停：它将引入 {entities}。\n以上条目在用户配置的信任边界之外（状态：{status}），而用户尚未做出这个决策——当前权限模式下无法弹出提示，因此决策在此交还。\n这不是安全裁决。请先询问用户是否引入 {first}，再重试。\n用户同意后可运行：hil trust add {first}（仅本会话：/hil trust add {first} --scope session）",
+
+  "cli.version": "hil {version} — 人类决策权护栏（MIT）",
+  "cli.help": "HIL — 面向智能体 AI 编码工具的人类决策权护栏\n\n用法：hil <命令> [选项]\n\n命令：\n  hook                                处理一个智能体 hook 事件（stdin JSON）\n  install [--scope user|project|local]\n                                      将 HIL 接入 Claude Code 配置\n  uninstall [--scope user|project|local]\n                                      只删除 install 写入的内容\n  trust add <名称...> [--category <类目>] [--status <状态>]\n                    [--scope global|project|session] [--session-id <id>]\n  trust remove <名称> [--scope global|project]\n  trust list [--scope global|project]\n  status [--session-id <id>]          当前会话：决策、冷却、静音\n  review [--session-id <id>]          本会话的决策日志\n  mute [--session-id <id>] [--category <类目>]\n  resume [--session-id <id>]\n  sync                                从 YAML/SQLite 重新编译信任缓存\n\n选项：\n  --lang en|zh-CN     本次调用的语言（默认：配置 / en）\n  --version, -v       打印版本\n  --help, -h          本帮助\n\n理念：意识，而非限制。智能体保持完全能力；只有当它越过你声明的边界时，\nHIL 才把那个决策交还给你。",
+
+  "cli.unknownCommand": "未知命令：{command} — 运行 `hil --help` 查看用法。",
+  "cli.error": "HIL 出错：{message}（fail-open — 你的会话不受影响）",
+
+  "cli.install.wroteSettings": "已写入 HIL hooks → {file}",
+  "cli.install.wroteCommand": "已写入 /hil 命令 → {file}",
+  "cli.install.done": "HIL 安装完成。空信任边界完全没问题：HIL 每个类目只提醒一次，随后保持安静。随时用 `hil trust add <名称>` 添加条目。",
+  "cli.uninstall.done": "已从 {file} 移除 HIL hooks",
+  "cli.uninstall.nothing": "{file} 中没有可移除的内容。",
+  "cli.uninstall.clearedStates": "已清理 {count} 个临时会话状态文件（纯派生数据；config.yaml 与 trust-boundary.yaml 不受影响）。",
+
+  "cli.trust.sessionIdRequired": "未找到活动中的 HIL 会话——会话级信任需要一个正在运行的会话（见 `hil status`）。",
+  "cli.trust.added": "{name} → {status}（{category}，{scope} 作用域）",
+  "cli.trust.removed": "已从 {scope} 边界移除 {name}。",
+  "cli.trust.notFound": "{name} 不在 {scope} 边界中。",
+  "cli.trust.listHeader": "信任边界（{scope} 作用域，{count} 条）：",
+  "cli.trust.listEmpty": "信任边界为空（{scope}）。用 `hil trust add <名称>` 添加条目。",
+
+  "cli.status.noSession": "未找到 HIL 会话状态。会话状态是临时的；接入 HIL hooks 的智能体会话运行期间才会出现。",
+  "cli.status.header": "HIL 状态",
+  "cli.status.boundary": "边界：全局 {global} 条 · 项目 {project} 条 · 会话临时 {session} 条",
+  "cli.status.session": "会话 {id}（回合数：{turns}，人类输入：{inputs} 次）",
+  "cli.status.decisions": "已记录决策：{count} 条（智能体 {agent} / 人类 {human}）",
+  "cli.status.interventions": "干预：{count} 次",
+  "cli.status.interventionsRow": "  · {at} [{level}] {category}：{entities}",
+  "cli.status.cooldowns": "生效中的冷却：{list}",
+  "cli.status.muted": "静音：会话={session} · 类目={categories}",
+  "cli.status.notMuted": "未静音。",
+  "label.none": "无",
+
+  "cli.review.header": "会话 {id} 的决策日志：",
+  "cli.review.empty": "本会话没有记录到决策。",
+  "cli.review.row": "  · {at} [{owner}] {summary}",
+
+  "cli.mute.done": "HIL 已静音（{scope}）。干预暂停。用 `hil resume` 恢复。",
+  "cli.mute.session.done": "会话 {id} 已静音。",
+  "cli.resume.done": "HIL 已恢复（{scope}）。",
+  "cli.resume.session.done": "会话 {id} 已恢复。",
+
+  "cli.sync.done": "已编译信任缓存：全局 {global} 条，项目 {project} 条。",
+
+  "category.library": "库",
+  "category.database": "数据库",
+  "category.external_service": "外部服务",
+  "category.plugin_mcp": "插件 / MCP",
+  "category.cli_infra": "CLI / 基础设施",
+  "category.data_source": "数据源",
+
+  "scope.global": "全局",
+  "scope.project": "项目",
+  "scope.session": "会话"
+}

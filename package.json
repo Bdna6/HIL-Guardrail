@@ -1,0 +1,54 @@
+{
+  "name": "hil-guardrail",
+  "version": "0.1.0",
+  "description": "Human Agency Guardrail for agentic AI coding tools — keep humans deciding, not necessarily executing.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Bdna6",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bdna6/hil-guardrail.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Bdna6/hil-guardrail/issues"
+  },
+  "homepage": "https://github.com/Bdna6/hil-guardrail#readme",
+  "engines": {
+    "node": ">=20"
+  },
+  "main": "dist/index.js",
+  "bin": {
+    "hil": "dist/interface/cli/main.js"
+  },
+  "files": [
+    "dist",
+    "locales"
+  ],
+  "scripts": {
+    "build": "tsc && node scripts/copy-assets.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "biome check src tests scripts",
+    "format": "biome format --write src tests scripts",
+    "check": "npm run lint && npm run build && npm run test",
+    "prepublishOnly": "npm run check"
+  },
+  "keywords": [
+    "ai",
+    "agent",
+    "human-in-the-loop",
+    "trust-boundary",
+    "guardrail",
+    "claude-code",
+    "codex"
+  ],
+  "dependencies": {
+    "yaml": "^2.8.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.0",
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0",
+    "vitest": "^3.2.0"
+  }
+}

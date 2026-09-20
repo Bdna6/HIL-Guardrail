@@ -1,0 +1,61 @@
+{
+  "intervention.trustCrossing.title": "HIL · Trust Boundary",
+  "intervention.trustCrossing.body": "The agent is about to introduce: {entities}.\nThis is outside your configured trust boundary (status: {status}).\nThis is not a safety verdict — it is a decision worth keeping with you. Quick review areas:\n  • What data flows to, or is stored by, this service?\n  • Who controls the credentials and keys?\n  • What permissions and dependencies does it add?\n  • Any vendor lock-in, licensing, or migration implications?\nYour call: allow, reject, or investigate first.\nTrust permanently: hil trust add {first} · Silence this session: /hil mute",
+
+  "intervention.trustCrossingDenied.title": "HIL · Trust Boundary (decision pending)",
+  "intervention.trustCrossingDenied.body": "This action was paused because it introduces: {entities}.\nThat is outside the user's configured trust boundary (status: {status}), and the user has not made this decision yet — in the current permission mode there is no way to surface a prompt, so the decision is being returned here.\nThis is not a safety verdict. Please ask the user whether to introduce {first} before retrying.\nIf the user approves, they can run: hil trust add {first}   (or for this session only: /hil trust add {first} --scope session)",
+
+  "cli.version": "hil {version} — Human Agency Guardrail (MIT)",
+  "cli.help": "HIL — Human Agency Guardrail for agentic AI coding tools\n\nUsage: hil <command> [options]\n\nCommands:\n  hook                                process one agent hook event (JSON on stdin)\n  install [--scope user|project|local]\n                                      wire HIL into Claude Code settings\n  uninstall [--scope user|project|local]\n                                      remove exactly what install wrote\n  trust add <name...> [--category <c>] [--status <s>]\n                    [--scope global|project|session] [--session-id <id>]\n  trust remove <name> [--scope global|project]\n  trust list [--scope global|project]\n  status [--session-id <id>]          current session: decisions, cooldowns, mute\n  review [--session-id <id>]          this session's decision log\n  mute [--session-id <id>] [--category <c>]\n  resume [--session-id <id>]\n  sync                                recompile trust caches from YAML/SQLite\n\nOptions:\n  --lang en|zh-CN     language for this invocation (default: config / en)\n  --version, -v       print version\n  --help, -h          this help\n\nPhilosophy: awareness, not restriction. The agent stays fully capable; HIL only\nreturns a decision to you when it crosses your declared boundary.",
+
+  "cli.unknownCommand": "Unknown command: {command} — run `hil --help` for usage.",
+  "cli.error": "HIL error: {message} (fail-open — your session is unaffected)",
+
+  "cli.install.wroteSettings": "Wrote HIL hooks → {file}",
+  "cli.install.wroteCommand": "Wrote /hil command → {file}",
+  "cli.install.done": "HIL installed. An empty trust boundary is fine: HIL asks once per category, then stays quiet. Add entries anytime with `hil trust add <name>`.",
+  "cli.uninstall.done": "Removed HIL hooks from {file}",
+  "cli.uninstall.nothing": "Nothing to remove in {file}.",
+  "cli.uninstall.clearedStates": "Cleared {count} ephemeral session state file(s) — derived data only; your config.yaml / trust-boundary.yaml are untouched.",
+
+  "cli.trust.sessionIdRequired": "No active HIL session found — session-scope trust needs a running session (see `hil status`).",
+  "cli.trust.added": "{name} → {status} ({category}, {scope} scope)",
+  "cli.trust.removed": "Removed {name} from the {scope} boundary.",
+  "cli.trust.notFound": "{name} is not in the {scope} boundary.",
+  "cli.trust.listHeader": "Trust boundary ({scope} scope, {count} entries):",
+  "cli.trust.listEmpty": "Trust boundary is empty ({scope}). Add entries with `hil trust add <name>`.",
+
+  "cli.status.noSession": "No HIL session state found. Sessions are ephemeral; state appears while an agent session with HIL hooks is running.",
+  "cli.status.header": "HIL status",
+  "cli.status.boundary": "Boundary: {global} global · {project} project · {session} session-temp entries",
+  "cli.status.session": "Session {id} (turns: {turns}, human inputs: {inputs})",
+  "cli.status.decisions": "Decisions recorded: {count} (agent {agent} / human {human})",
+  "cli.status.interventions": "Interventions: {count}",
+  "cli.status.interventionsRow": "  · {at} [{level}] {category}: {entities}",
+  "cli.status.cooldowns": "Active cooldowns: {list}",
+  "cli.status.muted": "Muted: session={session} · categories={categories}",
+  "cli.status.notMuted": "Not muted.",
+  "label.none": "none",
+
+  "cli.review.header": "Decision log for session {id}:",
+  "cli.review.empty": "No decisions recorded in this session.",
+  "cli.review.row": "  · {at} [{owner}] {summary}",
+
+  "cli.mute.done": "HIL muted ({scope}). Interventions paused. Resume with `hil resume`.",
+  "cli.mute.session.done": "HIL muted for session {id}.",
+  "cli.resume.done": "HIL resumed ({scope}).",
+  "cli.resume.session.done": "HIL resumed for session {id}.",
+
+  "cli.sync.done": "Compiled trust caches: {global} global entries, {project} project entries.",
+
+  "category.library": "library",
+  "category.database": "database",
+  "category.external_service": "external service",
+  "category.plugin_mcp": "plugin / MCP",
+  "category.cli_infra": "CLI / infrastructure",
+  "category.data_source": "data source",
+
+  "scope.global": "global",
+  "scope.project": "project",
+  "scope.session": "session"
+}

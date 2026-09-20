@@ -1,0 +1,49 @@
+# Example HIL Trust Boundary — copy to ~/.hil/trust-boundary.yaml (global)
+# or .hil/trust-boundary.yaml (project, version-controllable).
+#
+# This file is an *awareness* surface, not an allowlist: the agent stays free
+# to use or recommend anything. HIL only pauses to inform you when the agent
+# actually introduces something NOT declared here.
+#
+# 本文件是“意识”面而非允许清单：智能体仍可自由使用或推荐任何东西。
+# 只有当智能体实际引入此处未声明的条目时，HIL 才会暂停并提醒你。
+
+version: 1
+
+tools:
+  - name: PostgreSQL
+    category: database
+    status: trusted
+    aliases: [postgres, pg, psycopg2, psycopg]
+
+  - name: SQLite
+    category: database
+    status: trusted
+    aliases: [sqlite3, better-sqlite3]
+
+  - name: React
+    category: library
+    ecosystem: npm
+    status: trusted
+
+  - name: FastAPI
+    category: library
+    ecosystem: pypi
+    status: trusted
+
+  - name: Redis
+    category: database
+    status: reviewed
+    notes: 'Approved for caching; revisit before using in the request path.'
+
+  # - name: Supabase
+  #   category: external_service
+  #   status: unknown        # unknown/restricted → HIL asks before introduction
+
+  # - name: Firebase
+  #   category: external_service
+  #   status: restricted     # restricted = always ask, never silently proceed
+
+# Categories are extensible data. Recognized today:
+#   library | database | external_service | plugin_mcp | cli_infra | data_source
+# Trust states: unknown | reviewed | trusted | restricted | temporary
