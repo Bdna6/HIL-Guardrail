@@ -30,7 +30,7 @@ Explicitly deferred (not on any milestone until justified): license metadata fet
 | Codex lacks `ask` (deny is stronger than HIL's philosophy) | medium | documented honestly; reason wording returns decision to user; cooldown prevents deny-loops; `PermissionRequest` fall-through preferred when available (doc 05 §4) |
 | Command parsing misses install variants (false negatives) | low–medium | observation-only cost is low; corpus grows from real usage; misses surface as scenario gaps, not user harm |
 | Windows shell diversity (cmd/PowerShell/git-bash forms) | medium | fixtures for all three forms in unit corpus from day one (dev machine is Windows) |
-| SQLite/Node version coupling (`node:sqlite` availability) | low | Node ≥ 20 gate; fallback driver decision at M2 if needed |
+| SQLite/Node version coupling (`node:sqlite` availability) | low | Node ≥ 22.13 gate (unflagged `node:sqlite` floor); fallback driver decision at M2 if needed |
 
 ### 2.2 Product
 

@@ -6,7 +6,7 @@ HIL 是一个本地护栏：让编码智能体保持完全自主的同时，**�
 
 ## 环境要求
 
-- Node.js ≥ 20（`node --version`）
+- Node.js ≥ 22.13（`node --version`）
 - 可在终端运行的 Claude Code CLI
 - 就这些
 

@@ -53,7 +53,7 @@ HIL不是监控，也不是生产力追踪器，更不是简单的允许清单�
 
 ## 安装
 
-需要 Node ≥ 20 与 Claude Code CLI。Windows 与 Linux 经 CI 验证。
+需要 Node ≥ 22.13（内建 `node:sqlite`）与 Claude Code CLI。Windows 与 Linux 经 CI 验证。
 
 ```bash
 npm install -g hil-guardrail       # 或项目级：npm install

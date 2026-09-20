@@ -30,7 +30,7 @@
 | Codex 缺 `ask`（deny 比 HIL 哲学更强硬） | 中 | 如实文档化；理由措辞交还决策给用户；冷却防 deny 循环；可用时优先 `PermissionRequest` 落空（文档 05 §4） |
 | 命令解析漏掉安装变体（漏报） | 低–中 | 仅观察的代价低；语料随真实使用增长；漏报以场景缺口显形，不伤用户 |
 | Windows shell 多样性（cmd/PowerShell/git-bash 形态） | 中 | 单元语料从第一天起覆盖三种形态（开发机即 Windows） |
-| SQLite/Node 版本耦合（`node:sqlite` 可用性） | 低 | Node ≥ 20 门槛；M2 时按需决定备用驱动 |
+| SQLite/Node 版本耦合（`node:sqlite` 可用性） | 低 | Node ≥ 22.13 门槛（`node:sqlite` 免 flag 下限）；M2 时按需决定备用驱动 |
 
 ### 2.2 产品风险
 

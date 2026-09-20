@@ -6,7 +6,7 @@ HIL is a local guardrail that keeps **you** the decision-maker while your coding
 
 ## What you need
 
-- Node.js ≥ 20 (`node --version`)
+- Node.js ≥ 22.13 (`node --version`)
 - Claude Code CLI working in a terminal
 - That's it
 

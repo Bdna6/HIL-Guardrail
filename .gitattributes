@@ -1,0 +1,4 @@
+# Normalize line endings to LF on checkout everywhere (CI parity with local):
+# biome's formatter enforces LF, and Windows runners with autocrlf would
+# otherwise check out CRLF and fail `npm run lint` spuriously.
+* text=auto eol=lf

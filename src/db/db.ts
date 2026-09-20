@@ -57,7 +57,8 @@ export type SqliteDb = {
 
 /** Opens (creating if needed) and migrates the database. */
 export function openDb(file: string): SqliteDb {
-  // node:sqlite is built-in on Node >= 22.5; required for the CLI side only.
+  // node:sqlite is built-in and unflagged from Node >= 22.13 (>= 23.4 on the
+  // 23.x line); required for the CLI side only.
   const { DatabaseSync } = require('node:sqlite') as typeof import('node:sqlite');
   mkdirSync(dirname(file), { recursive: true });
   const db = new DatabaseSync(file);

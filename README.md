@@ -52,7 +52,7 @@ HIL is not surveillance, not a productivity tracker, and not a mere allowlist en
 
 ## Install
 
-Requires Node ≥ 20 and the Claude Code CLI. Windows and Linux are CI-tested.
+Requires Node ≥ 22.13 (built-in `node:sqlite`) and the Claude Code CLI. Windows and Linux are CI-tested.
 
 ```bash
 npm install -g hil-guardrail       # or: npm install (project-local)

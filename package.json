@@ -14,7 +14,7 @@
   },
   "homepage": "https://github.com/Bdna6/hil-guardrail#readme",
   "engines": {
-    "node": ">=20"
+    "node": ">=22.13"
   },
   "main": "dist/index.js",
   "bin": {
