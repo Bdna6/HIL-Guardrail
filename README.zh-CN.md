@@ -55,6 +55,8 @@ HIL 是一个本地后台运行的人机协作护栏。用户通过网页配置�
 
 ## 使用本地后台（0.2.0）
 
+需要 Node.js ≥ 22.13 和可正常使用的 Claude Code。以下命令在项目根目录执行。
+
 ```powershell
 npm install
 npm run build
@@ -81,33 +83,13 @@ npm run hil -- start --port 4174
 
 当前流程：网页保存模式 → 下一条用户消息时适配器加载并注入状态 → 在原工具继续。首次安装 hooks 后需新开会话。网页保存不等于 CLI 已生效。操作审批、理解评估和输出展示是不同能力，需要分别验证。原生 CLI 的结束检查点不等于能在答案显示前拦住答案。
 
-## 早期 npm CLI 护栏（历史入口）
-
-以下是早期 npm 护栏的用法，不代表 npm 已发布本地后台版本；新用户请优先使用上方源码安装步骤。需要 Node ≥ 22.13 和 Claude Code CLI。
-
-```bash
-npm install -g hil-guardrail
-hil install --scope user
-hil trust add postgresql --category database
-hil trust add react fastapi --category library
-```
-
-当 AI 实际引入边界外的实体时，HIL 提供本地化提醒与数据流、凭据、权限等审查要点。适配器根据权限模式呈现确认或阻止当前动作并返回理由；工具执行成功不能证明用户已经理解。
-
-| 命令 | 用途 |
-| --- | --- |
-| `hil install` / `hil uninstall` | 安装 / 移除 Claude Code hooks |
-| `hil trust add` / `hil trust remove` / `hil trust list` | 管理信任边界 |
-| `hil status` / `hil review` | 查看会话状态与决策日志 |
-| `hil mute` / `hil resume` | 静音 / 恢复原有信任边界提醒；后台整体开关使用本地网页 |
-
-确定性规则本地处理，无遥测；会话状态临时保存。启用语义评估后，必要任务、操作与回答片段会发给配置的模型服务，常见密钥字段脱敏；不应假定脱敏能识别所有敏感内容。详情见本地后台说明。
-
 ## 最新调研
 
 见 [后台 hooks 适配器可行性调研](docs/09-hooks-feasibility.zh-CN.md)（2026-10-30）：Claude Code 优先，Codex 独立适配，Gemini CLI / OpenCode 为后续候选。文档明确区分官方能力、设计推论与待实测项。
 
 ## 已实现能力的边界
+
+确定性规则本地处理，无遥测；会话状态临时保存。启用语义评估后，必要任务、操作与回答片段会发给配置的模型服务，常见密钥字段脱敏；不应假定脱敏能识别所有敏感内容。详情见本地后台说明。
 
 - Build / Work / Study 的提示、摘要、上下文和确认偏好会提供给 Agent；它们并不都是独立的强制闸门。
 - 硬检查点主要覆盖已识别资源、Study 实现前参与和有变更后的阶段回顾。语义范围判断与理解评估需要额外模型配置。

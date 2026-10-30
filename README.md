@@ -55,6 +55,8 @@ See the [documentation index](docs/README.md) for setup and adapter research. Cu
 
 ## Run the local runtime
 
+Requires Node.js ≥ 22.13 and working Claude Code. Run these commands from the project root.
+
 ```powershell
 npm install
 npm run build
@@ -79,33 +81,13 @@ The architecture is a **local companion + web console + tool adapters**. The cur
 
 Current flow: save settings, load mode facts on the next user turn, and continue in the original tool. First hook installation requires a new session. Browser save does not establish CLI activation. Approvals, understanding assessment, and output presentation are separate capabilities to validate per adapter. End-of-turn checks do not establish control over answers already displayed.
 
-## Legacy npm CLI guardrail
-
-This is the earlier npm guardrail entry point, not proof that the local runtime has been published to npm. New users should use the source installation above. Requires Node ≥ 22.13 and Claude Code CLI.
-
-```bash
-npm install -g hil-guardrail
-hil install --scope user
-hil trust add postgresql --category database
-hil trust add react fastapi --category library
-```
-
-HIL provides localized review prompts when an agent introduces entities outside the configured boundary. Depending on permission mode, the adapter requests confirmation or denies the current operation with a reason. Successful execution is not evidence of human understanding.
-
-| Command | Purpose |
-| --- | --- |
-| `hil install` / `hil uninstall` | Add/remove Claude Code hooks |
-| `hil trust add` / `hil trust remove` / `hil trust list` | Manage trust boundaries |
-| `hil status` / `hil review` | Inspect session state and decisions |
-| `hil mute` / `hil resume` | Silence/restore legacy trust alerts; use the local web switch for overall runtime enablement |
-
-Deterministic rules run locally without telemetry and keep ephemeral session state. Enabled semantic analysis sends minimal task, operation and answer snippets to the configured provider; common credential patterns are redacted, without a guarantee that all sensitive data can be detected.
-
 ## Latest research
 
 See the [background hooks feasibility report (Chinese)](docs/09-hooks-feasibility.zh-CN.md), dated 2026-10-30. It prioritizes Claude Code, then Codex hooks, with Gemini CLI and OpenCode as later candidates, distinguishing documented interfaces from designs and unverified behavior.
 
 ## Implementation boundaries
+
+Deterministic rules run locally without telemetry and keep ephemeral session state. Enabled semantic analysis sends minimal task, operation and answer snippets to the configured provider; common credential patterns are redacted, without a guarantee that all sensitive data can be detected.
 
 - Summary, context and acknowledgment preferences are Agent instructions, not separate hard gates.
 - Enforced checkpoints cover identified resources, participation before Study implementation, and review after changes. Semantic scope and understanding checks require a separately configured evaluator.
