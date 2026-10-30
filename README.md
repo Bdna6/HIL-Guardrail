@@ -118,7 +118,7 @@ See the [background hooks feasibility report (Chinese)](docs/09-hooks-feasibilit
 2. Expand real-session compatibility testing across Claude Code versions and DeepSeek.
 3. Improve semantic assessment accuracy, false-positive handling and project evidence.
 4. Implement production authentication and opt-in project memory.
-5. Add Codex hooks; prepare a repeatable competition demo and user evaluation.
+5. Add Codex hooks.
 
 HIL is not employee surveillance, participation ranking, or a human-contribution percentage system. Evaluate whether it helps users notice choices, verify results, explain and own outcomes, while keeping interruptions reasonable.
 
