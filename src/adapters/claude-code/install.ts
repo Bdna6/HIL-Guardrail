@@ -8,6 +8,7 @@ import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node
 import { homedir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { resolvePaths } from '../../core/paths.js';
 
 export type InstallScope = 'user' | 'project' | 'local';
 
@@ -27,7 +28,7 @@ export function hookCommand(): string {
   const here = dirname(fileURLToPath(import.meta.url));
   // dist/adapters/claude-code/install.js → dist/interface/cli/main.js
   const cli = join(here, '..', '..', 'interface', 'cli', 'main.js');
-  return `${JSON.stringify(process.execPath)} ${JSON.stringify(cli)} hook ${HIL_MARKER}`;
+  return `${JSON.stringify(process.execPath)} ${JSON.stringify(cli)} hook ${HIL_MARKER} --hil-home ${JSON.stringify(resolvePaths(process.cwd()).hilHome)}`;
 }
 
 interface HookGroup {
@@ -53,11 +54,12 @@ export function commandDirFor(scope: InstallScope, projectDir: string): string {
 }
 
 function readSettings(file: string): SettingsShape {
+  if (!existsSync(file)) return {};
   try {
     const parsed = JSON.parse(readFileSync(file, 'utf8')) as SettingsShape;
     return parsed && typeof parsed === 'object' ? parsed : {};
   } catch {
-    return {};
+    throw new Error(`Cannot read settings safely: ${file}. Fix the JSON before installing HIL.`);
   }
 }
 
@@ -80,7 +82,7 @@ export function installHooks(
     const existing = (settings.hooks[event] ?? []).filter((group) => !isOurs(group));
     const ours: HookGroup = {
       ...(matcher ? { matcher } : {}),
-      hooks: [{ type: 'command', command, timeout: 10 }],
+      hooks: [{ type: 'command', command, timeout: 20 }],
     };
     settings.hooks[event] = [...existing, ours];
   }
@@ -91,7 +93,15 @@ export function installHooks(
   const commandDir = commandDirFor(scope, projectDir);
   const commandFile = join(commandDir, 'hil.md');
   mkdirSync(commandDir, { recursive: true });
-  writeFileSync(commandFile, HIL_COMMAND_MD, 'utf8');
+  const executable = hookCommand().replace(` hook ${HIL_MARKER}`, '');
+  writeFileSync(
+    commandFile,
+    HIL_COMMAND_MD.replace('hil $ARGUMENTS', `${executable} $ARGUMENTS`).replace(
+      'Bash(hil *)',
+      'Bash',
+    ),
+    'utf8',
+  );
 
   return { settings: settingsFile, command: commandFile };
 }

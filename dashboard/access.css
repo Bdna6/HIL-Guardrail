@@ -1,0 +1,579 @@
+.access {
+  position: fixed;
+  inset: 0;
+  background: #fff;
+  color: #111;
+  font-family: Arial, Helvetica, sans-serif;
+  z-index: 5;
+  overflow: hidden;
+  color-scheme: light;
+}
+.access header {
+  position: absolute;
+  top: 30px;
+  left: 4vw;
+  right: 4vw;
+  display: flex;
+  justify-content: space-between;
+  font:
+    12px Consolas,
+    monospace;
+  z-index: 2;
+}
+.opening,
+.introduction {
+  height: 100dvh;
+  position: relative;
+  padding: 110px 5vw 70px;
+}
+.opening h1 {
+  margin: 7vh 0 30px;
+  font-size: clamp(30px, 7.8vw, 118px);
+  line-height: 1.04;
+  font-weight: 800;
+  letter-spacing: -0.055em;
+}
+.opening h1 span,
+.introduction h2 span {
+  display: block;
+}
+.opening p {
+  font:
+    10px Consolas,
+    monospace;
+  letter-spacing: 1px;
+  max-width: 320px;
+  line-height: 1.8;
+}
+.access-mark {
+  position: absolute;
+  bottom: 55px;
+  right: 5vw;
+  font-size: clamp(65px, 13vw, 190px);
+  letter-spacing: -0.1em;
+}
+.access button {
+  border: 1px solid #ccc;
+  background: white;
+  color: #111;
+  border-radius: 0;
+  padding: 13px 25px;
+  font-size: 13px;
+}
+.access .explore {
+  position: absolute;
+  bottom: 35px;
+  left: 5vw;
+  border: 0;
+  padding: 0;
+  font:
+    10px Consolas,
+    monospace;
+  letter-spacing: 1px;
+}
+.introduction {
+  overflow-y: auto;
+  text-align: center;
+}
+.intro-content {
+  min-height: calc(100dvh - 220px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 850px;
+  margin: auto;
+  padding: 20px 0 60px;
+}
+.access-eyebrow {
+  font:
+    10px Consolas,
+    monospace;
+  letter-spacing: 1.5px;
+  color: #666;
+}
+.introduction h2 {
+  font-size: clamp(34px, 5vw, 74px);
+  line-height: 1.05;
+  letter-spacing: -0.05em;
+  margin: 24px 0;
+}
+.access-description {
+  max-width: 560px;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #666;
+}
+.access-support {
+  font-size: 12px;
+  color: #777;
+  margin: 8px 0 30px;
+}
+.access-actions {
+  display: flex;
+  gap: 12px;
+}
+.access-actions button {
+  min-width: 130px;
+}
+.access-actions button:first-child {
+  background: #111;
+  color: #fff;
+  border-color: #111;
+}
+.intro-content small {
+  font:
+    10px Consolas,
+    monospace;
+  color: #777;
+  margin-top: 20px;
+  line-height: 1.7;
+}
+.ticker {
+  overflow: hidden;
+  border-block: 1px solid #eee;
+  padding: 20px 0;
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+.ticker div {
+  width: max-content;
+  font:
+    11px Consolas,
+    monospace;
+  letter-spacing: 2px;
+  animation: marquee 45s linear infinite;
+}
+.ticker:hover div {
+  animation-play-state: paused;
+}
+@keyframes marquee {
+  to {
+    transform: translateX(-25%);
+  }
+}
+.flying-text {
+  position: fixed;
+  z-index: 7;
+  pointer-events: none;
+  font-family: Arial, sans-serif;
+  font-weight: 800;
+  white-space: nowrap;
+  transform-origin: top left;
+  color: #111;
+}
+.access-dialog {
+  color-scheme: light;
+  background: white;
+  color: #111;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 38px;
+  width: min(440px, calc(100% - 36px));
+  max-height: 90dvh;
+  overflow: auto;
+  box-shadow: 0 20px 100px #0002;
+  font-family: Arial, sans-serif;
+  animation: dialog-in 0.2s ease-out;
+}
+.access-dialog::backdrop {
+  background: #ffffffa8;
+  backdrop-filter: blur(7px);
+}
+.access-dialog h2 {
+  font-size: 24px;
+  letter-spacing: -0.7px;
+  margin: 0 0 12px;
+}
+.access-dialog p {
+  color: #777;
+  font-size: 12px;
+  line-height: 1.7;
+}
+.access-dialog label {
+  display: block;
+  font-size: 12px;
+  margin-top: 20px;
+}
+.access-dialog input {
+  color: #111;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  display: block;
+  margin-top: 8px;
+  padding: 12px;
+  width: 100%;
+}
+.access-dialog button {
+  background: white;
+  color: #111;
+  border: 0;
+  cursor: pointer;
+}
+.access-dialog .dialog-close {
+  position: absolute;
+  right: 14px;
+  top: 10px;
+  font-size: 24px;
+}
+.password-field {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  margin-top: 8px;
+}
+.password-field input {
+  margin: 0;
+  border: 0;
+  min-width: 0;
+}
+.password-field button {
+  font-size: 11px;
+  padding: 10px;
+}
+.access-dialog .access-submit {
+  background: #111;
+  color: white;
+  width: 100%;
+  padding: 13px;
+  margin-top: 10px;
+  border-radius: 3px;
+}
+.access-dialog .switch-form {
+  font-size: 12px;
+  margin-top: 24px;
+  padding: 0;
+  text-decoration: underline;
+}
+.access-dialog #access-error {
+  color: #a22;
+}
+.access button:focus-visible,
+.access-dialog button:focus-visible,
+.access-dialog input:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 4px;
+}
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+@media (max-width: 600px) {
+  .opening {
+    padding-top: 150px;
+  }
+  .opening h1 {
+    margin-top: 8vh;
+    font-size: 8vw;
+    letter-spacing: -0.04em;
+  }
+  .access header {
+    top: 24px;
+  }
+  .opening p {
+    max-width: 230px;
+    font-size: 9px;
+  }
+  .access-mark {
+    bottom: 90px;
+  }
+  .introduction {
+    padding-inline: 24px;
+  }
+  .access-support {
+    line-height: 1.7;
+  }
+  .access-dialog {
+    padding: 32px 24px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticker div {
+    animation: none;
+  }
+  .access-dialog {
+    animation: none;
+  }
+}
+/* Continuous spatial composition */
+.access {
+  perspective: 1200px;
+}
+.access header {
+  align-items: center;
+}
+.header-emblem {
+  width: 45px;
+  height: 45px;
+  display: block;
+}
+.header-emblem svg,
+.background-emblem svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.background-emblem {
+  position: absolute;
+  right: 4vw;
+  bottom: 4vh;
+  width: clamp(150px, 22vw, 330px);
+  height: clamp(150px, 22vw, 330px);
+  color: #202020;
+  pointer-events: none;
+  z-index: 0;
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+.opening,
+.introduction {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+.opening h1 {
+  opacity: 0;
+}
+.composition-text {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  overflow: visible;
+}
+.composition-text span {
+  position: absolute;
+  white-space: nowrap;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 700;
+  line-height: 1.04;
+  transform-origin: top left;
+  will-change: transform;
+}
+.opening h1 {
+  font-weight: 700;
+}
+.opening p,
+.explore {
+  position: relative;
+  z-index: 4;
+}
+.intro-content {
+  width: 100%;
+  max-width: none;
+  min-height: calc(100dvh - 180px);
+  padding-bottom: 30px;
+}
+.sequence-space {
+  position: relative;
+  width: 100vw;
+  height: 112px;
+  margin: 15px calc(50% - 50vw) 30px;
+  flex-shrink: 0;
+}
+.sequence-pause {
+  position: absolute;
+  bottom: -5px;
+  right: 7vw;
+  z-index: 5;
+  pointer-events: auto;
+}
+.access .sequence-pause {
+  font:
+    10px Consolas,
+    monospace;
+  border: 0;
+  padding: 6px 0;
+  color: #888;
+  background: transparent;
+}
+.access-description {
+  margin-top: 15px;
+}
+.access-actions {
+  gap: 32px;
+}
+.access-actions button {
+  border-radius: 16px;
+  padding: 15px 32px;
+  transition:
+    transform 0.18s,
+    box-shadow 0.18s;
+}
+.access-actions button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px #00000012;
+}
+.access-actions button:active {
+  transform: translateY(0) scale(0.98);
+}
+.access-dialog {
+  border-radius: 27px;
+  background: linear-gradient(145deg, #fff, #fafafa);
+  border: 1px solid #e4e4e4;
+  box-shadow:
+    inset 0 1px 0 white,
+    0 4px 12px #00000005,
+    0 24px 65px #00000013,
+    0 50px 130px #00000012;
+  animation: panel-arrive 0.38s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.access-dialog input {
+  border-radius: 12px;
+  background: #ffffffb0;
+}
+.password-field {
+  border-radius: 12px;
+  background: #ffffffb0;
+  overflow: hidden;
+}
+.password-field input {
+  background: transparent;
+}
+.access-dialog .access-submit {
+  border-radius: 14px;
+  padding: 15px;
+}
+.access-dialog .dialog-close {
+  width: 32px;
+  height: 32px;
+  right: 16px;
+  top: 13px;
+  border-radius: 50%;
+  background: #f1f1f1;
+  font-size: 22px;
+}
+.access-dialog .dialog-close:hover {
+  background: #e8e8e8;
+}
+@keyframes panel-arrive {
+  from {
+    opacity: 0;
+    transform: perspective(900px) translateY(18px) scale(0.96) rotateX(4deg);
+  }
+  to {
+    opacity: 1;
+    transform: perspective(900px) translateY(0) scale(1) rotateX(0);
+  }
+}
+@media (max-width: 600px) {
+  .access-actions {
+    gap: 24px;
+  }
+  .access-actions button {
+    min-width: 115px;
+    padding: 14px 23px;
+  }
+  .sequence-space {
+    height: 95px;
+    margin-bottom: 20px;
+  }
+  .background-emblem {
+    bottom: 10vh;
+  }
+  .intro-content {
+    padding-top: 30px;
+  }
+  .access-dialog {
+    border-radius: 25px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .access-dialog {
+    animation: none;
+  }
+  .access-actions button {
+    transition: none;
+  }
+  .composition-text {
+    display: none;
+  }
+  .opening h1 {
+    opacity: 1;
+  }
+  .sequence-space {
+    height: auto;
+    min-height: 100px;
+    padding: 15px 28px;
+  }
+  .sequence-space > .sr-only {
+    position: static;
+    width: auto;
+    height: auto;
+    clip: auto;
+    white-space: normal;
+    font-size: 22px;
+    font-weight: 700;
+    display: block;
+    text-align: center;
+    line-height: 1.5;
+  }
+  .sequence-pause {
+    display: none;
+  }
+}
+/* Three coordinated row landing, with viewport-only clipping. */
+.composition-text {
+  perspective: 1000px;
+  perspective-origin: 50% 35%;
+  transform-style: preserve-3d;
+}
+.sequence-space {
+  height: calc(
+    clamp(28.8px, 3.9vw, 62.4px) *
+    1.12 +
+    clamp(19.2px, 2.7vw, 43.2px) *
+    1.12 +
+    clamp(12px, 1.56vw, 24px) *
+    1.12 +
+    80px
+  );
+  margin-top: 15px;
+  margin-bottom: 22px;
+}
+.intro-content {
+  padding-top: 30px;
+  padding-bottom: 45px;
+}
+.background-emblem {
+  will-change: transform, opacity;
+}
+@media (max-width: 600px) {
+  .sequence-space {
+    height: calc(28.8px * 1.12 + 19.2px * 1.12 + 12px * 1.12 + 80px);
+    margin-bottom: 16px;
+  }
+  .intro-content {
+    padding-top: 16px;
+  }
+  .access-description {
+    margin-top: 6px;
+  }
+  .access-support {
+    margin-bottom: 24px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sequence-space {
+    height: auto;
+    padding: 12px 24px 35px;
+  }
+  .sequence-space > .sr-only {
+    font-size: inherit;
+  }
+  .sequence-space > .sr-only span {
+    display: block;
+    margin: 12px 0;
+    font-size: clamp(24px, 4vw, 48px);
+    line-height: 1.15;
+  }
+  .sequence-space > .sr-only span:nth-child(2) {
+    font-size: clamp(20px, 3vw, 34px);
+  }
+  .sequence-space > .sr-only span:nth-child(3) {
+    font-size: clamp(15px, 2vw, 24px);
+  }
+}

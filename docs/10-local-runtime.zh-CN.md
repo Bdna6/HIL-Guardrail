@@ -1,0 +1,108 @@
+# HIL 本地后台与 Claude Code 使用说明
+
+适用版本：0.2.0。本地网页负责配置，终端中的 Claude Code 负责工作、问答和学习。此版本不需要 HIL 云账户；开屏登录仍是未连接的前端，不代表云同步已完成。
+
+## 启动与连接
+
+在仓库根目录运行：
+
+```powershell
+npm install
+npm run build
+npm run hil -- install --scope user
+npm run hil -- start --port 4174
+```
+
+- `install` 合并 HIL 自己的 hooks，保留 CC Switch 的模型、供应商和其他 hook 配置。设置 JSON 损坏时拒绝覆盖。
+- `start` 启动独立的后台 Node 进程，Windows 下不弹出额外窗口。关闭网页或启动它的终端不会停止后台。
+- 需要独立评估时，可追加 `--semantic claude`；它不能复用 Claude 官方订阅登录、OAuth 或订阅额度，需要实际的 API 地址、模型和密钥。该参数明确启用额外的语义评估调用：从 Claude Code 用户 `settings.json` 的 `env` 读取供应商、模型与凭据，仅在进程内使用，不传给网页，也不复制到 HIL 配置中。
+- `--direct` 为评估请求使用直接 HTTP(S) 连接。需要代理的网络请省略此项，并配置正常的网络环境。
+- 不需要额外评估调用时，省略 `--semantic claude`。此时保留资源规则、模式上下文和人工检查点，但不会声称独立验证理解或完成语义范围判断。
+- 如果服务已经启动，`start` 返回现有状态；更改启动参数前先运行 `npm run hil -- stop`。
+
+默认端口为 4173；本项目此前的静态预览占用了它，本次本机后台使用 **4174**。打开：
+
+**http://127.0.0.1:4174/local/dashboard**
+
+`/local/*` 是实际后台配置，`/demo/*` 仍为独立样例数据。不要用 demo 页判断真实启用状态。Usage 图表仍明确标为样例，尚未用于真实活动分析。
+
+首次安装或更新 hooks 后，新开一个 Claude Code 会话。如需审查 hooks，使用宿主的配置/审查界面；不要使用 `--bare`，因为该模式跳过 hooks。
+
+## 模式与开关
+
+- **Build**：保留原始目标，识别新资源；配置语义评估时对重要写入与资源变更判断范围扩张。日常测试和只读操作保持静默。
+- **Work**：给 Agent 注入来源、假设和交付核验约定；有变更的阶段结束时要求具体人工回顾。
+- **Study**：要求先尝试和逐步提示；首次实现前设思路检查点，阶段结束请求解释与变式预测。问题和回答在 Claude Code 原对话里完成。
+
+网页保存配置后持久写入本地后台文件，并递增 revision。**模式在下一条用户消息时加载到该会话；关闭 HIL 对后续工具事件立即生效。** 重启会话也能加载最新配置，但不必重启整个 VS Code。
+
+旧会话在工具执行中途不会突然换模式。多个会话各自在下一次用户输入时更新，后台状态中的会话 revision 可以与配置 revision 不同。
+
+关闭开关表示停止干预，后台仍在线并能提供状态；`stop` 才是停止后台进程。后台不可用时，hook 明确报告停止/降级状态，不继续宣称保护正在生效。
+
+## 在 CLI 中查询
+
+直接在 Claude Code 里问：
+
+```text
+HIL 现在是什么模式？是否在运行、是否开启？当前 HIL 版本号是多少？
+```
+
+每个 `SessionStart` 和 `UserPromptSubmit` 都会提供来自本地后台的 runtime facts，包含运行、启用、模式、软件版本和 revision。**模型应报告这些事实，而不是从对话猜测。** 若模型未收到这些信息，检查 hooks 是否启用、会话是否重启以及是否切换了配置目录。
+
+也可以在项目终端执行：
+
+```powershell
+npm run hil -- runtime status
+npm run hil -- status --json
+npm run hil -- stop
+```
+
+安装器生成 `/hil` 命令时使用绝对 Node/CLI 路径，因此从源码使用时不要求全局 `hil` 已经在 PATH 中。若之后移动仓库目录，需要重新 build、install。
+
+## 检查点的实际含义
+
+资源越界仍使用现有确定性信任边界：全局、项目、会话信任、冷却与静音。Claude Code 可呈现原生审批时使用 `ask`；不能审批时拒绝当前动作并将问题交回原对话。后台记录这种拒绝，防止 Agent 在没有用户输入时立即重试绕过冷却。
+
+Study 的思路检查和阶段回顾使用独立状态：
+
+1. 关键实现前，hook 拒绝当前操作，并要求 Agent 向用户提出问题、等待回答。
+2. 单纯的 `ok` / “继续”不会解除检查点。
+3. 启用评估模型时，用问题、任务和用户回答进行结构化评估；回答不足时继续提问；评估失败则保留待处理状态。
+4. 未启用评估时，实质性回答记为 `user-responded-unverified`；它是用户参与/授权记录，**不是理解验证**。
+5. `Stop` 只请求一次回顾，使用 `stop_hook_active` 避免无限循环。它不能收回已经显示的答案。
+
+语义判断不保证正确，也不能证明用户已掌握整个项目。工具执行成功、用户授权与模型评估是不同证据。网页上的“本地配置已保存”也不等于所有会话都已确认加载。
+
+## CC Switch / DeepSeek
+
+HIL 不更改模型供应商，也不代理 Claude Code 的正常模型请求。你可以在 CC Switch 切换到 DeepSeek，再打开 Claude Code。切换后检查 HIL hooks 是否仍存在；若 CC Switch 覆盖了配置，重新运行安装命令。
+
+语义评估支持：
+
+- `--semantic claude`：使用当前用户配置的 Anthropic-compatible API，按 `/v1/messages` 请求；处理 Claude Code 模型名上的 `[1m]` 等上下文后缀。更换供应商后，新评估会重新读取配置。
+- 或设置 `HIL_MODEL_BASE_URL`、`HIL_MODEL_API_KEY`、`HIL_MODEL`，使用 chat-completions-compatible API。base URL 应为 API 根路径（例如包含所需 `/v1`），不包含 `/chat/completions`。
+
+项目级 provider override、`apiKeyHelper`、OAuth 与 CC Switch 的多个独立配置目录尚未自动解析；这类环境应显式设置 HIL 的评估模型变量。终端本身的 hooks 仍独立于这些评估凭据。
+
+评估会额外消耗配置供应商的额度。只发送必要任务片段和操作/回答证据；常见密钥字段会脱敏，环境文件内容不送出，但不要把任意敏感文本视为能被正则完全识别。
+
+## 数据与服务接口
+
+本地数据默认在 `~/.hil/runtime/`，可通过 `HIL_HOME` 改目录：
+
+- `config.json`：持久模式、开关、各模式策略、目标和 revision。
+- `endpoint.json`：后台地址、PID 与内部 hook token。不能分享此文件。
+- `sessions.json`：临时任务摘要、检查点和会话状态；会话结束删除对应条目，事件处理时清理超过 48 小时的残留。
+- `service.log`：启动与错误信息，不记录模型密钥。
+
+服务只监听 `127.0.0.1`。网页使用同源 HttpOnly/SameSite cookie；内部 hooks 使用本地 token。配置修改校验字段与 revision，阻止跨来源访问和过期覆盖。不应暴露到公网。
+
+## 本次验证
+
+- 94 项测试：现有规则与适配器、真实 HTTP 服务、cookie/origin、配置校验与并发版本、开关、Study 检查点、语义评估协议、凭据脱敏、安装时保留原配置。
+- 本地浏览器：真实 `/local` 配置保存、Study 切换、开关、刷新、设置路由、hooks 回读及手机布局。
+- Claude Code **2.1.92** 原生 `--print` 实测：模型从 hooks 返回 `running=true / enabled=true / mode=build / version=0.2.0`。
+- 当前本机用户配置实际为 **GLM**。使用该供应商实测语义范围评估，正确识别“本地应用 → 云数据库和强制账号”的范围扩张。
+- **未将你的模型改为 DeepSeek，也未声称完成 DeepSeek 原生交互会话实测。** 切回 DeepSeek 后，应运行上述状态查询，并用一个独立小项目验证工具调用、暂停和回答行为。
+- 云账户、云同步、Codex、完整电脑安全沙箱、任意自然语言答案的强制输出门槛不在此版本已完成范围。

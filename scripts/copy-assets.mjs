@@ -6,7 +6,7 @@ const root = new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '
 const dist = join(root, 'dist');
 
 mkdirSync(dist, { recursive: true });
-for (const asset of ['locales']) {
+for (const asset of ['locales', 'dashboard']) {
   const from = join(root, asset);
   if (existsSync(from)) {
     cpSync(from, join(dist, asset), { recursive: true });

@@ -89,6 +89,8 @@ function fail(message: string): never {
 // ---------- commands ----------
 
 async function cmdHook(flags: Record<string, string | boolean>): Promise<void> {
+  const customHome = flagString(flags, 'hil-home');
+  if (customHome) process.env.HIL_HOME = customHome;
   const raw = await readStdin();
   const langFlag = flagString(flags, 'lang');
   if (langFlag) process.env.HIL_LANG = normalizeLang(langFlag); // manual testing aid
@@ -381,6 +383,18 @@ async function cmdStatus(
   flags: Record<string, string | boolean>,
   T: ReturnType<typeof makeT>,
 ): Promise<void> {
+  const { runtimeRequest } = await import('../../runtime/client.js');
+  let runtime: unknown;
+  try {
+    runtime = await runtimeRequest('/internal/status');
+  } catch {
+    runtime = { running: false, enabled: false, version, mode: null };
+  }
+  if (flags.json === true) {
+    console.log(JSON.stringify(runtime, null, 2));
+    return;
+  }
+  console.log(JSON.stringify(runtime, null, 2));
   const paths = resolvePaths(process.cwd());
   const { readTrustSnapshot } = await import('../../core/trust/store.js');
   const globalCount = readTrustSnapshot(paths.globalTrustCache)?.entities.length ?? 0;
@@ -555,6 +569,8 @@ function makeT(lang: Lang) {
 async function main(): Promise<void> {
   const argv = process.argv.slice(2);
   const { positionals, flags } = parseArgs(argv);
+  const customHome = flagString(flags, 'hil-home');
+  if (customHome) process.env.HIL_HOME = customHome;
   const lang = resolveLang(flags);
   const T = makeT(lang);
 
@@ -566,11 +582,48 @@ async function main(): Promise<void> {
   const command = positionals[0] ?? 'help';
   if (command === 'help' || flags.h === true || flags.help === true) {
     console.log(T('cli.help'));
+    console.log(
+      'Runtime: hil start [--port N] [--semantic claude] [--direct] | hil stop | hil runtime status | hil status --json',
+    );
     return;
   }
 
   try {
     switch (command) {
+      case 'start': {
+        if (flags.direct === true) process.env.HIL_MODEL_DIRECT = '1';
+        const semantic = flagString(flags, 'semantic');
+        if (semantic) {
+          if (semantic !== 'claude')
+            fail('Use --semantic claude or HIL_MODEL_* environment variables');
+          process.env.HIL_SEMANTIC_SOURCE = 'claude';
+        }
+        const { start } = await import('../../runtime/lifecycle.js');
+        const port = Number(flagString(flags, 'port') ?? 4173);
+        if (!Number.isInteger(port) || port < 1 || port > 65535) fail('Invalid port');
+        await start(port);
+        break;
+      }
+      case 'serve': {
+        const { serve } = await import('../../runtime/server.js');
+        await serve(Number(flagString(flags, 'port') ?? 4173));
+        break;
+      }
+      case 'stop': {
+        const { runtimeRequest } = await import('../../runtime/client.js');
+        console.log(JSON.stringify(await runtimeRequest('/internal/shutdown', {})));
+        break;
+      }
+      case 'runtime': {
+        const { runtimeRequest } = await import('../../runtime/client.js');
+        if (positionals[1] !== 'status') fail('Usage: hil runtime status');
+        try {
+          console.log(JSON.stringify(await runtimeRequest('/internal/status'), null, 2));
+        } catch {
+          console.log(JSON.stringify({ running: false, enabled: false, mode: null, version }));
+        }
+        break;
+      }
       case 'hook':
         await cmdHook(flags);
         break;

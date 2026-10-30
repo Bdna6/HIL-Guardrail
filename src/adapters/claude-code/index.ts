@@ -27,8 +27,17 @@ function trace(paths: { hilHome: string }, line: string): void {
   }
 }
 
-export async function handleHook(rawStdin: string): Promise<HookOutcome> {
+export async function handleHook(
+  rawStdin: string,
+  options: { skipRuntime?: boolean; suppressInterventions?: boolean } = {},
+): Promise<HookOutcome> {
   try {
+    if (!options.skipRuntime) {
+      const { forwardHook } = await import('../../runtime/client.js');
+      const forwarded = await forwardHook(rawStdin);
+      if (forwarded !== undefined)
+        return { stdout: forwarded, lang: normalizeLang(process.env.HIL_LANG) };
+    }
     const input = parseHookInput(rawStdin);
     if (!input) return { stdout: '', lang: 'en' };
     const event = toCoreEvent(input, Date.now());
@@ -37,6 +46,7 @@ export async function handleHook(rawStdin: string): Promise<HookOutcome> {
     const cwd = typeof input.cwd === 'string' && input.cwd.length > 0 ? input.cwd : process.cwd();
     const paths = resolvePaths(cwd);
     const config = configFromCache(readConfigCache(paths.globalConfigCache), process.env.HIL_LANG);
+    if (options.suppressInterventions) config.mutedAll = true;
     const lang = normalizeLang(process.env.HIL_LANG ?? config.language);
 
     trace(

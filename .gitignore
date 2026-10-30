@@ -11,6 +11,7 @@ coverage/
 # HIL local runtime state (never commit)
 .hil/state/
 .hil/cache/
+.hil/runtime/
 hil.db
 hil.db-*
 
