@@ -17,6 +17,7 @@ The static server maps these routes to `index.html`; root-relative assets suppor
 
 - `demo.js`: shared shell, navigation and four page renderers.
 - `demo-state.js`: product copy, component metadata, validated storage and sample usage aggregation.
+- `base.css`: shared browser resets and form primitives.
 - `demo.css`: scoped monochrome workspace styling, themes and responsive layouts.
 - `app.js`: entry router between landing and demo.
 - `access.js`, `access-motion.js`, `access.css`, `logo.js`: landing, animation, authentication UI and shared logo.
@@ -27,4 +28,4 @@ Replace `loadDemo` / `persistDemo` with account-backed persistence in a future i
 
 ## Live local control
 
-The compiled HIL runtime additionally serves `/local/*`. It reuses the workspace through `local.js`, with HTTP configuration persistence, revisions, runtime facts and an actual enable switch. Demo storage and authentication remain separate. Start with `npm run hil -- start --port 4174 --semantic claude --direct` after building. See [the runtime guide](../docs/10-local-runtime.zh-CN.md).
+The compiled HIL runtime additionally serves `/local/*`. It reuses the workspace through `local.js`, with HTTP configuration persistence, revisions, runtime facts and an actual enable switch. Demo storage and authentication remain separate. Start with `npm run hil -- start --port 4174` after building. See [the runtime guide](../docs/10-local-runtime.zh-CN.md).

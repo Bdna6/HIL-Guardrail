@@ -109,10 +109,7 @@
   align-items: center;
   gap: 30px;
   padding: 10px 15px 10px 20px;
-  background: var(--surface);
-  border: 1px solid var(--border);
   border-radius: 50px;
-  box-shadow: 0 5px 25px #00000006;
 }
 .demo-brand {
   display: flex;
@@ -137,7 +134,6 @@
   margin: auto;
 }
 .demo-nav nav a {
-  border-radius: 30px;
   padding: 10px 20px;
   text-decoration: none;
   font-size: 13px;
@@ -207,14 +203,6 @@
   color: var(--secondary);
   margin-bottom: 0;
 }
-.demo-modes {
-  border: 0;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 23px;
-}
 .demo-mode {
   position: relative;
   display: flex;
@@ -252,75 +240,11 @@
   outline: 2px solid var(--ink);
   outline-offset: 5px;
 }
-.demo-mode-top {
-  display: flex;
-  justify-content: space-between;
-  font:
-    10px Consolas,
-    monospace;
-  letter-spacing: 1px;
-  color: var(--secondary);
-}
-.demo-mode-check {
-  font-size: 14px;
-  color: var(--ink);
-}
-.demo-symbol {
-  font-size: 53px;
-  line-height: 1;
-  align-self: center;
-  padding: 22px 0 26px;
-  font-family: Arial, sans-serif;
-  font-weight: 400;
-}
 .demo-mode > strong {
   font-size: 23px;
   font-weight: 500;
   letter-spacing: -0.7px;
   margin-bottom: 8px;
-}
-.demo-mode-description {
-  font-size: 12px;
-  line-height: 1.9;
-  color: var(--secondary);
-  max-width: 260px;
-}
-.demo-modes + .demo-caption {
-  margin: 15px 0 32px;
-}
-.demo-summary {
-  border-block: 1px solid var(--border);
-  padding: 27px 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 28px;
-}
-.demo-summary .demo-kicker {
-  margin-bottom: 8px;
-}
-.demo-summary h2 {
-  margin: 0;
-  font-size: 22px;
-}
-.demo-summary dl {
-  display: flex;
-  gap: 45px;
-  margin: 0;
-}
-.demo-summary dt {
-  font-size: 11px;
-  color: var(--secondary);
-  margin-bottom: 7px;
-}
-.demo-summary dd {
-  margin: 0;
-  font-size: 13px;
-}
-.demo-summary > a {
-  font-size: 12px;
-  text-underline-offset: 4px;
-  white-space: nowrap;
 }
 .demo-adapter {
   display: flex;
@@ -752,10 +676,6 @@
   min-height: 230px;
   padding: 20px;
 }
-.demo-app[data-density="compact"] .demo-symbol {
-  padding: 12px 0;
-  font-size: 40px;
-}
 .demo-app[data-density="compact"] .demo-panel {
   padding: 20px;
 }
@@ -794,24 +714,11 @@
     max-width: 260px;
     text-align: right;
   }
-  .demo-modes {
-    gap: 13px;
-  }
   .demo-mode {
     padding: 22px 19px;
   }
   .demo-mode.is-selected {
     padding: 21px 18px;
-  }
-  .demo-summary {
-    flex-wrap: wrap;
-    gap: 20px;
-  }
-  .demo-summary dl {
-    gap: 25px;
-  }
-  .demo-summary > a {
-    margin-left: auto;
   }
   .demo-settings-columns {
     gap: 25px;
@@ -883,10 +790,6 @@
     text-align: left;
     margin-top: 14px;
   }
-  .demo-modes {
-    grid-template-columns: 1fr;
-    gap: 13px;
-  }
   .demo-mode {
     min-height: 155px;
     padding: 20px;
@@ -897,38 +800,9 @@
   .demo-mode.is-selected {
     padding: 19px;
   }
-  .demo-mode-top {
-    grid-column: 1 / -1;
-  }
-  .demo-symbol {
-    grid-row: 2 / 4;
-    grid-column: 2;
-    padding: 0;
-    font-size: 42px;
-  }
   .demo-mode > strong {
     font-size: 22px;
     margin: 0;
-  }
-  .demo-mode-description {
-    font-size: 12px;
-    max-width: 100%;
-    grid-column: 1;
-  }
-  .demo-summary {
-    display: block;
-    padding: 25px 0;
-  }
-  .demo-summary dl {
-    display: flex;
-    margin: 22px 0;
-    gap: 25px;
-  }
-  .demo-summary dd {
-    font-size: 12px;
-  }
-  .demo-summary > a {
-    font-size: 12px;
   }
   .demo-adapter {
     flex-wrap: wrap;
@@ -1034,9 +908,6 @@
   .demo-app[data-density="compact"] .demo-mode {
     min-height: 140px;
   }
-  .demo-app[data-density="compact"] .demo-symbol {
-    padding: 0;
-  }
 }
 @media (prefers-reduced-motion: reduce) {
   .demo-app * {
@@ -1044,7 +915,6 @@
     transition: none !important;
   }
 }
-/* Raised chassis with four independent navigation keys. */
 .demo-nav {
   position: relative;
   padding-block: 15px;
@@ -1199,62 +1069,35 @@
     font-size: 10px;
   }
 }
-/* Radial mode selector and quiet central power control. */
 .demo-mode-stage {
-  display: grid;
   grid-template-columns: 330px minmax(0, 1fr);
-  align-items: center;
-  min-height: 410px;
-  padding: 15px 40px 35px 0;
   border-bottom: 1px solid var(--border);
 }
 .demo-radial-modes {
-  position: relative;
   min-width: 0;
-  width: 300px;
-  height: 300px;
   padding: 0;
   border: 0;
-  margin: 0;
   perspective: 800px;
 }
 .radial-origin {
   position: absolute;
-  left: 16px;
-  top: calc(50% - 4px);
-  width: 8px;
-  height: 8px;
-  border: 1px solid var(--ink);
   border-radius: 50%;
-  box-shadow: 0 0 0 7px var(--soft);
 }
 .radial-mode {
   position: absolute;
-  left: 20px;
-  top: calc(50% - 35px);
-  width: 260px;
   height: 70px;
   transform-origin: 0 50%;
   display: flex;
   align-items: center;
   cursor: pointer;
-  padding-left: 38px;
-}
-.radial-mode:nth-of-type(1) {
-  transform: rotate(-28deg);
 }
 .radial-mode:nth-of-type(2) {
   transform: rotate(0deg);
-}
-.radial-mode:nth-of-type(3) {
-  transform: rotate(28deg);
 }
 .radial-mode:before {
   content: "";
   position: absolute;
   height: 1px;
-  left: 3px;
-  width: 26px;
   background: var(--border);
 }
 .radial-mode input {
@@ -1266,13 +1109,7 @@
 .radial-word {
   display: flex;
   align-items: baseline;
-  gap: 2px;
-  color: var(--secondary);
-  font-family: Arial, sans-serif;
-  font-weight: 600;
   line-height: 1;
-  letter-spacing: -1px;
-  filter: drop-shadow(1px 3px 2px #0000000c);
   transition:
     color 0.22s,
     transform 0.22s;
@@ -1294,16 +1131,12 @@
 }
 .radial-mode.is-selected .radial-word {
   color: var(--ink);
-  transform: translateX(7px);
-  filter: drop-shadow(2px 4px 2px #00000018);
 }
 .radial-mode.is-selected:before {
   background: var(--ink);
-  width: 32px;
 }
 .radial-mode:hover .radial-word {
   color: var(--ink);
-  transform: translateX(10px);
 }
 .radial-mode:has(input:focus-visible) .radial-word {
   outline: 2px solid var(--ink);
@@ -1344,9 +1177,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 18px;
   position: relative;
-  width: 170px;
   margin: 0 auto;
   cursor: pointer;
   font-size: 13px;
@@ -1357,8 +1188,6 @@
 }
 .demo-power input {
   position: absolute;
-  right: 18px;
-  width: 55px;
   height: 30px;
   opacity: 0;
 }
@@ -1447,7 +1276,6 @@
     margin-top: 20px;
   }
 }
-/* Center the mode independently; keep the radial selector at the left edge. */
 .demo-mode-stage {
   position: relative;
   display: flex;
@@ -1477,17 +1305,10 @@
   top: calc(50% - 65px);
   width: 130px;
   height: 130px;
-  border: 1px solid var(--border);
-  box-shadow:
-    inset 0 1px 2px #00000005,
-    0 0 0 12px var(--soft);
-  background: var(--bg);
 }
 .radial-mode {
   left: -10px;
   top: calc(50% - 35px);
-  width: 320px;
-  padding-left: 108px;
 }
 .radial-mode:before {
   left: 68px;
@@ -1573,9 +1394,7 @@
     margin-bottom: 4px;
   }
 }
-/* Ink-like radial lettering growing directly from the circular edge. */
 .radial-mode {
-  padding-left: 62px;
   width: 335px;
 }
 .radial-mode:before,
@@ -1585,82 +1404,13 @@
 .radial-word {
   --radial-ink: var(--secondary);
   color: var(--radial-ink);
-  font-family: Impact, "Arial Black", Arial, sans-serif;
-  font-weight: 900;
-  gap: 1px;
-  letter-spacing: -0.5px;
-  transform: skewX(-8deg);
   filter: none;
-  text-shadow:
-    1px 1px 0 var(--bg),
-    2px 3px 0 var(--border);
-}
-.radial-word > .radial-letter {
-  position: relative;
-  display: inline-block;
-  font-weight: 900;
-}
-.radial-word > .radial-letter:nth-child(1) {
-  font-size: 19px;
-}
-.radial-word > .radial-letter:nth-child(2) {
-  font-size: 22px;
-}
-.radial-word > .radial-letter:nth-child(3) {
-  font-size: 25px;
-}
-.radial-word > .radial-letter:nth-child(4) {
-  font-size: 28px;
-}
-.radial-word > .radial-letter:nth-child(5) {
-  font-size: 31px;
-}
-.radial-word > .radial-letter:nth-child(6) {
-  font-size: 34px;
-}
-.radial-word > .radial-letter:nth-child(7) {
-  font-size: 37px;
-}
-.radial-word > .radial-letter:nth-child(8) {
-  font-size: 40px;
-}
-.radial-word > .radial-letter:nth-child(9) {
-  font-size: 43px;
-}
-.radial-word > .radial-letter:nth-child(10) {
-  font-size: 46px;
-}
-.radial-word > .radial-letter:first-child {
-  color: transparent;
-  text-shadow: none;
-}
-.radial-letter:first-child:before,
-.radial-letter:first-child:after {
-  content: attr(data-letter);
-  position: absolute;
-  inset: 0;
-  color: var(--radial-ink);
-}
-.radial-letter:first-child:before {
-  filter: blur(1.8px);
-  opacity: 0.5;
-  mask-image: linear-gradient(90deg, #000 0%, #000 35%, transparent 65%);
-}
-.radial-letter:first-child:after {
-  clip-path: inset(0 0 0 50%);
 }
 .radial-mode.is-selected .radial-word {
   --radial-ink: var(--ink);
-  transform: skewX(-8deg);
-  filter: none;
-  text-shadow:
-    1px 1px 0 var(--bg),
-    2px 3px 0 var(--border),
-    3px 4px 0 var(--border);
 }
 .radial-mode:hover .radial-word {
   --radial-ink: var(--ink);
-  transform: translateX(3px) skewX(-10deg);
 }
 @media (max-width: 600px) {
   .radial-mode {
@@ -1670,22 +1420,6 @@
   .radial-word {
     gap: 0;
   }
-  .radial-word > .radial-letter:nth-child(9) {
-    font-size: 39px;
-  }
-  .radial-word > .radial-letter:nth-child(10) {
-    font-size: 42px;
-  }
-}
-/* Sharp action-lettering and an open, right-facing hub. */
-.radial-origin {
-  clip-path: inset(-2px -2px -2px 50%);
-  box-shadow: none;
-  border: 2px solid var(--border);
-  background: transparent;
-}
-.radial-mode {
-  padding-left: 48px;
 }
 .radial-word {
   font-family: "Arial Black", Arial, Helvetica, sans-serif;
@@ -1699,16 +1433,6 @@
   text-shadow:
     1px 1px 0 var(--bg),
     2px 2px 0 var(--secondary);
-}
-.radial-word > .radial-letter {
-  -webkit-text-stroke: 0.35px var(--radial-ink);
-}
-.radial-word > .radial-letter:first-child {
-  -webkit-text-stroke: 0 transparent;
-}
-.radial-letter:first-child:before,
-.radial-letter:first-child:after {
-  -webkit-text-stroke: 0.35px var(--radial-ink);
 }
 .radial-mode.is-selected .radial-word {
   transform: skewX(-10deg) scaleX(0.84);
@@ -1724,60 +1448,21 @@
     padding-left: 48px;
   }
 }
-/* A solid hub occludes the roots; mode order remains fixed around its center. */
 .radial-origin {
-  background: var(--ink);
-  border: 0;
-  z-index: 3;
   pointer-events: none;
   clip-path: inset(0 0 0 50%);
-  box-shadow: none;
-}
-.radial-mode {
-  z-index: 1;
-  padding-left: 48px;
 }
 .radial-word {
   isolation: isolate;
 }
-.radial-word > .radial-letter:first-child:before {
-  filter: blur(1px);
-  opacity: 0.65;
-}
 .radial-mode.is-selected .radial-word {
   filter: none;
-}
-/* A pale solid hub keeps the root occlusion without a heavy black mass. */
-.radial-origin {
-  background: linear-gradient(100deg, var(--soft) 0%, var(--surface) 72%);
-  border: 1px solid var(--border);
-  box-shadow: inset -3px 0 6px #00000004;
-}
-.demo-app[data-theme="dark"] .radial-origin {
-  background: linear-gradient(100deg, #262626, #1b1b1b 72%);
-  border-color: #3b3b3b;
-  box-shadow: inset -2px 0 5px #ffffff04;
-}
-/* Keep every letter readable; the hub meets the word rather than covering it. */
-.radial-mode {
-  padding-left: 72px;
-}
-.radial-word > .radial-letter:first-child {
-  color: var(--radial-ink);
-  text-shadow: inherit;
-  -webkit-text-stroke: 0.35px var(--radial-ink);
-}
-.radial-letter:first-child:before,
-.radial-letter:first-child:after {
-  content: none;
-  display: none;
 }
 @media (max-width: 600px) {
   .radial-mode {
     padding-left: 72px;
   }
 }
-/* Restore the open radial treatment with clean outlined action lettering. */
 .radial-origin {
   background: transparent;
   border: 1px solid var(--border);
@@ -1798,101 +1483,24 @@
 .radial-mode:hover .radial-word {
   font-family: "Arial Black", Arial, Helvetica, sans-serif;
   font-weight: 900;
-  font-style: italic;
-  color: #fff;
-  text-shadow: none;
-  filter: none;
-  transform: skewX(-10deg) scaleX(0.84);
-}
-.radial-word > .radial-letter,
-.radial-word > .radial-letter:first-child {
-  color: #fff;
-  -webkit-text-fill-color: #fff;
-  -webkit-text-stroke: 1.25px #111;
-  paint-order: stroke fill;
-  text-shadow: none;
-}
-.radial-mode.is-selected .radial-letter,
-.radial-mode.is-selected .radial-letter:first-child {
-  -webkit-text-stroke-width: 2px;
-}
-.radial-letter:first-child:before,
-.radial-letter:first-child:after {
-  display: none;
-  content: none;
-}
-.demo-app[data-theme="dark"] .radial-letter {
-  filter: drop-shadow(0 0 1px #ffffff70);
 }
 @media (max-width: 600px) {
   .radial-mode {
     padding-left: 48px;
   }
 }
-/* Stronger outward perspective and bold black outlines. */
-.radial-word > .radial-letter:nth-child(1) {
-  font-size: 12px;
-}
-.radial-word > .radial-letter:nth-child(2) {
-  font-size: 16px;
-}
-.radial-word > .radial-letter:nth-child(3) {
-  font-size: 21px;
-}
-.radial-word > .radial-letter:nth-child(4) {
-  font-size: 26px;
-}
-.radial-word > .radial-letter:nth-child(5) {
-  font-size: 32px;
-}
-.radial-word > .radial-letter:nth-child(6) {
-  font-size: 38px;
-}
-.radial-word > .radial-letter:nth-child(7) {
-  font-size: 44px;
-}
-.radial-word > .radial-letter:nth-child(8) {
-  font-size: 50px;
-}
-.radial-word > .radial-letter:nth-child(9) {
-  font-size: 56px;
-}
-.radial-word > .radial-letter:nth-child(10) {
-  font-size: 62px;
-}
-.radial-word > .radial-letter,
-.radial-word > .radial-letter:first-child {
-  -webkit-text-stroke-width: 2px;
-}
-.radial-mode.is-selected .radial-letter,
-.radial-mode.is-selected .radial-letter:first-child {
-  -webkit-text-stroke-width: 3px;
-}
-@media (max-width: 600px) {
-  .radial-word > .radial-letter:nth-child(9) {
-    font-size: 50px;
-  }
-  .radial-word > .radial-letter:nth-child(10) {
-    font-size: 55px;
-  }
-}
-/* A single typographic plane gives both words continuous perspective. */
 .radial-word,
 .radial-mode.is-selected .radial-word,
 .radial-mode:hover .radial-word {
-  display: inline-block;
   white-space: nowrap;
   font-size: 32px;
   line-height: 1.15;
   letter-spacing: -0.8px;
   color: #fff;
   -webkit-text-fill-color: #fff;
-  -webkit-text-stroke: 2px #111;
   paint-order: stroke fill;
   transform-origin: left center;
-  transform: perspective(400px) rotateY(-42deg) skewX(-8deg);
   text-shadow: none;
-  filter: none;
 }
 .radial-mode.is-selected .radial-word {
   -webkit-text-stroke-width: 3px;
@@ -1905,7 +1513,6 @@
     transform: perspective(380px) rotateY(-42deg) skewX(-8deg);
   }
 }
-/* Outline geometry supplies the taper; no rasterized CSS perspective. */
 .radial-word,
 .radial-mode.is-selected .radial-word,
 .radial-mode:hover .radial-word {
@@ -1928,12 +1535,8 @@
 .mode-vector path {
   fill: #fff;
   stroke: #111;
-  stroke-width: 1.8;
   stroke-linejoin: round;
   paint-order: stroke fill;
-}
-.radial-mode.is-selected .mode-vector path {
-  stroke-width: 2.6;
 }
 @media (max-width: 600px) {
   .radial-word,
@@ -1947,8 +1550,6 @@
     height: 74px;
   }
 }
-
-/* Heavier ink for the compact vector lettering. */
 .mode-vector path {
   stroke-width: 2.5;
 }

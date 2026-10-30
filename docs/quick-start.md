@@ -1,5 +1,8 @@
 # Quick Start
 
+> This page covers the legacy CLI. For the current background runtime, modes, semantic evaluation and privacy boundaries, use the [local runtime guide](10-local-runtime.zh-CN.md).
+
+
 > 5 minutes, one terminal, zero configuration required to begin. / 中文版：[quick-start.zh-CN.md](quick-start.zh-CN.md)
 
 HIL is a local guardrail that keeps **you** the decision-maker while your coding agent stays fully autonomous. It watches for one thing: the agent *actually introducing* a technology you haven't reviewed — then it pauses that single action and hands the decision back to you.
@@ -80,12 +83,12 @@ Routine work — tests, refactors, debugging, `npx vitest`, `git` — never trig
 | `~/.hil/state/` | ephemeral session state — **deleted when the session ends** |
 | `.hil/` (in a project) | project-level boundary, shareable via the repo |
 
-Local processing only; no network on the hot path; no telemetry. Details: [privacy & security](06-privacy-and-security.md).
+Local processing only; no network on the hot path; no telemetry. Details: [privacy & security](10-local-runtime.zh-CN.md).
 
 ## Troubleshooting
 
 - **No prompt appeared when the agent installed something.**
-  - You're probably in an **IDE-embedded panel** (e.g. the VS Code extension): those currently ignore hook permission decisions — observation works, intervention doesn't. Use the terminal CLI for full protection ([details](04-integration-claude-code.md#31-verified-integration-surface)).
+  - You're probably in an **IDE-embedded panel** (e.g. the VS Code extension): those currently ignore hook permission decisions — observation works, intervention doesn't. Use the terminal CLI for full protection ([details](09-hooks-feasibility.zh-CN.md)).
   - In `dontAsk`/`bypassPermissions` modes no prompt *can* appear, so HIL denies the action with a "please ask the user first" message instead — that's the intended fallback.
   - Still nothing? `hil status` shows whether HIL recorded the crossing; set `HIL_TRACE=1` for Claude Code and check `~/.hil/trace.log`.
 - **`hil: command not found`** — re-run `npm install -g hil-guardrail`, or use `npx hil-guardrail`.
@@ -94,5 +97,5 @@ Local processing only; no network on the hot path; no telemetry. Details: [priva
 ## FAQ
 
 - **Does it slow my agent down?** The hook runs locally in milliseconds, with no network and no LLM. If HIL ever fails, it fails open — your session is unaffected.
-- **Does it read my conversations?** No. It looks at tool calls (commands, file paths) and stores only metadata. [Details](06-privacy-and-security.md).
+- **Does it read my conversations?** No. It looks at tool calls (commands, file paths) and stores only metadata. [Details](10-local-runtime.zh-CN.md).
 - **Does it limit the AI?** Never. The agent can use and propose anything; HIL only surfaces *introductions* across a boundary you declared — the allow/deny call is always yours.

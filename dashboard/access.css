@@ -23,14 +23,12 @@
 .opening,
 .introduction {
   height: 100dvh;
-  position: relative;
   padding: 110px 5vw 70px;
 }
 .opening h1 {
   margin: 7vh 0 30px;
   font-size: clamp(30px, 7.8vw, 118px);
   line-height: 1.04;
-  font-weight: 800;
   letter-spacing: -0.055em;
 }
 .opening h1 span,
@@ -44,13 +42,6 @@
   letter-spacing: 1px;
   max-width: 320px;
   line-height: 1.8;
-}
-.access-mark {
-  position: absolute;
-  bottom: 55px;
-  right: 5vw;
-  font-size: clamp(65px, 13vw, 190px);
-  letter-spacing: -0.1em;
 }
 .access button {
   border: 1px solid #ccc;
@@ -76,21 +67,12 @@
   text-align: center;
 }
 .intro-content {
-  min-height: calc(100dvh - 220px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  max-width: 850px;
   margin: auto;
   padding: 20px 0 60px;
-}
-.access-eyebrow {
-  font:
-    10px Consolas,
-    monospace;
-  letter-spacing: 1.5px;
-  color: #666;
 }
 .introduction h2 {
   font-size: clamp(34px, 5vw, 74px);
@@ -111,7 +93,6 @@
 }
 .access-actions {
   display: flex;
-  gap: 12px;
 }
 .access-actions button {
   min-width: 130px;
@@ -129,51 +110,19 @@
   margin-top: 20px;
   line-height: 1.7;
 }
-.ticker {
-  overflow: hidden;
-  border-block: 1px solid #eee;
-  padding: 20px 0;
-  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
-}
-.ticker div {
-  width: max-content;
-  font:
-    11px Consolas,
-    monospace;
-  letter-spacing: 2px;
-  animation: marquee 45s linear infinite;
-}
-.ticker:hover div {
-  animation-play-state: paused;
-}
 @keyframes marquee {
   to {
     transform: translateX(-25%);
   }
 }
-.flying-text {
-  position: fixed;
-  z-index: 7;
-  pointer-events: none;
-  font-family: Arial, sans-serif;
-  font-weight: 800;
-  white-space: nowrap;
-  transform-origin: top left;
-  color: #111;
-}
 .access-dialog {
   color-scheme: light;
-  background: white;
   color: #111;
-  border: 1px solid #ddd;
-  border-radius: 8px;
   padding: 38px;
   width: min(440px, calc(100% - 36px));
   max-height: 90dvh;
   overflow: auto;
-  box-shadow: 0 20px 100px #0002;
   font-family: Arial, sans-serif;
-  animation: dialog-in 0.2s ease-out;
 }
 .access-dialog::backdrop {
   background: #ffffffa8;
@@ -196,9 +145,7 @@
 }
 .access-dialog input {
   color: #111;
-  background: #fff;
   border: 1px solid #ccc;
-  border-radius: 3px;
   display: block;
   margin-top: 8px;
   padding: 12px;
@@ -212,15 +159,11 @@
 }
 .access-dialog .dialog-close {
   position: absolute;
-  right: 14px;
-  top: 10px;
-  font-size: 24px;
 }
 .password-field {
   display: flex;
   align-items: center;
   border: 1px solid #ccc;
-  border-radius: 3px;
   margin-top: 8px;
 }
 .password-field input {
@@ -236,9 +179,7 @@
   background: #111;
   color: white;
   width: 100%;
-  padding: 13px;
   margin-top: 10px;
-  border-radius: 3px;
 }
 .access-dialog .switch-form {
   font-size: 12px;
@@ -277,9 +218,6 @@
     max-width: 230px;
     font-size: 9px;
   }
-  .access-mark {
-    bottom: 90px;
-  }
   .introduction {
     padding-inline: 24px;
   }
@@ -291,14 +229,10 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .ticker div {
-    animation: none;
-  }
   .access-dialog {
     animation: none;
   }
 }
-/* Continuous spatial composition */
 .access {
   perspective: 1200px;
 }
@@ -326,7 +260,6 @@
   pointer-events: none;
   z-index: 0;
   transform-origin: center;
-  will-change: transform, opacity;
 }
 .opening,
 .introduction {
@@ -365,12 +298,10 @@
   width: 100%;
   max-width: none;
   min-height: calc(100dvh - 180px);
-  padding-bottom: 30px;
 }
 .sequence-space {
   position: relative;
   width: 100vw;
-  height: 112px;
   margin: 15px calc(50% - 50vw) 30px;
   flex-shrink: 0;
 }
@@ -515,7 +446,6 @@
     display: none;
   }
 }
-/* Three coordinated row landing, with viewport-only clipping. */
 .composition-text {
   perspective: 1000px;
   perspective-origin: 50% 35%;

@@ -51,7 +51,7 @@ Challenges are one intervention, not the default for every task. Understanding c
 | Semantic scope and answer assessment | Optional provider-backed checks implemented; durable project memory remains planned |
 | Codex hooks adapter | Planned; requires validation against current official interfaces |
 
-Original [docs](docs/README.md) and [PROMPT_HIL.md](PROMPT_HIL.md) describe the first generation. This README supersedes conflicting product constraints such as “no dashboards” and “no identity dimension.” Existing CLI behavior remains defined by its implementation and tests. Source version is `0.2.0`; this does not imply publication to npm.
+See the [documentation index](docs/README.md) for setup and adapter research. Current behavior is defined by the implementation and tests. Source version is `0.2.0`; this does not imply publication to npm.
 
 ## Run the local runtime
 

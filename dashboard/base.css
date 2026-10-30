@@ -1,0 +1,254 @@
+/* Shared resets and primitives retained by the landing and workspace. */
+:root {
+  font-family: Inter, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-synthesis: none;
+  --serif: Georgia, "Songti SC", "SimSun", serif;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+}
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+button,
+a,
+input,
+textarea,
+select {
+  -webkit-tap-highlight-color: transparent;
+}
+button {
+  cursor: pointer;
+}
+button {
+  color: inherit;
+}
+button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 3px solid #75a58d;
+  outline-offset: 4px;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+.icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  vertical-align: middle;
+}
+.small {
+  font-size: 12px;
+}
+.eyebrow {
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 2.1px;
+  color: #87958c;
+}
+.button {
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 11px 17px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  font-size: 12px;
+  font-weight: 600;
+  transition:
+    background 0.18s,
+    transform 0.18s;
+}
+.button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+.dark {
+  background: #294d40;
+  color: #fff;
+}
+.full {
+  width: 100%;
+}
+h1,
+h2,
+h3,
+p {
+  margin-top: 0;
+}
+.brand {
+  display: flex;
+  gap: 13px;
+  align-items: center;
+}
+.workspace {
+  display: flex;
+  min-height: 100vh;
+}
+.content {
+  max-width: 1450px;
+  margin: 0 auto;
+  padding: 35px 39px 25px;
+}
+.card {
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 24px;
+}
+textarea,
+input {
+  border: 1px solid #e0e6da;
+  border-radius: 7px;
+  padding: 12px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.15s;
+}
+textarea {
+  resize: vertical;
+  font-size: 11px;
+  line-height: 1.8;
+  min-height: 92px;
+}
+.permission {
+  font-size: 8px;
+  color: #8c9c7e;
+  margin-left: auto;
+  white-space: nowrap;
+  margin-top: 2px;
+}
+.toggle-row {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  padding: 23px 0;
+  border-bottom: 1px solid #edf0e7;
+  cursor: pointer;
+}
+.toggle-row b {
+  font-size: 12px;
+  font-weight: 500;
+  display: block;
+}
+.toggle-row small {
+  display: block;
+  font-size: 11px;
+  margin-top: 8px;
+  line-height: 1.8;
+}
+.toggle-row input {
+  position: absolute;
+  right: 0;
+  opacity: 0;
+  width: 38px;
+  height: 22px;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+@media (min-width: 1550px) {
+  .content {
+    padding-top: 45px;
+  }
+  .card {
+    padding: 28px;
+  }
+}
+@media (max-width: 1150px) {
+  .content {
+    padding: 27px 25px;
+  }
+  .card {
+    padding: 18px;
+  }
+}
+@media (max-width: 680px) {
+  .workspace {
+    display: block;
+  }
+  .content {
+    padding: 25px 18px;
+  }
+  .card {
+    padding: 19px 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
+:root {
+  color-scheme: dark;
+  color: #e2e8f3;
+  background: #0c1019;
+  --green: #497bff;
+  --muted: #8b99b0;
+  --line: #252e40;
+  --paper: #121925;
+}
+body {
+  background: #0c1019;
+}
+.card {
+  background: #121925;
+  border-color: var(--line);
+}
+.primary {
+  background: #4778f5;
+  color: white;
+  box-shadow: 0 3px 15px #2f63e52b;
+}
+.primary:hover:not(:disabled) {
+  background: #5a88ff;
+}
+.button:disabled {
+  opacity: 0.45;
+}
+.toggle-row {
+  border-color: var(--line);
+}
+.toggle-row small {
+  color: #8e9db3;
+}
+textarea,
+input {
+  background: #0e1522;
+  border-color: #2d3b53;
+  color: #dae5f8;
+}
+textarea::placeholder,
+input::placeholder {
+  color: #6e7e99;
+}
+textarea:focus,
+input:focus {
+  border-color: #608dff;
+  box-shadow: 0 0 0 3px #4d79ff20;
+}
+button:focus-visible,
+a:focus-visible {
+  outline-color: #8ab2ff;
+}

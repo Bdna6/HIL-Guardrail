@@ -1,5 +1,8 @@
 # 快速开始
 
+> 此页保留旧版 CLI 的使用方式。当前后台服务、模式切换和语义评估的使用与隐私边界请见[本地后台指南](10-local-runtime.zh-CN.md)。
+
+
 > 5 分钟，一个终端，零配置即可上手。/ English: [quick-start.md](quick-start.md)
 
 HIL 是一个本地护栏：让编码智能体保持完全自主的同时，**你**仍是决策者。它只盯一件事——智能体*实际引入*你未审查过的技术——然后暂停这一个动作，把决策交还给你。
@@ -80,12 +83,12 @@ hil trust add react fastapi --category library
 | `~/.hil/state/` | 临时会话状态——**会话结束即删除** |
 | `.hil/`（项目内） | 项目级边界，可随仓库共享 |
 
-仅本地处理；热路径无网络；无遥测。详见[隐私与安全](06-privacy-and-security.zh-CN.md)。
+仅本地处理；热路径无网络；无遥测。详见[隐私与安全](10-local-runtime.zh-CN.md)。
 
 ## 故障排查
 
 - **智能体安装了东西，但没弹提示。**
-  - 你可能在 **IDE 内嵌面板**（如 VS Code 插件）里：这类运行时目前会忽略 hook 的权限决策——观察有效，干预无效。完整防护请用终端 CLI（[详情](04-integration-claude-code.zh-CN.md#1-已核实的集成面)）。
+  - 你可能在 **IDE 内嵌面板**（如 VS Code 插件）里：这类运行时目前会忽略 hook 的权限决策——观察有效，干预无效。完整防护请用终端 CLI（[详情](09-hooks-feasibility.zh-CN.md)）。
   - 在 `dontAsk`/`bypassPermissions` 模式下本来就无法弹窗，HIL 会改为拒绝该动作并附"请先询问用户"的说明——这是设计好的降级行为。
   - 还是没有？`hil status` 能看出 HIL 是否记录了越界；给 Claude Code 设置 `HIL_TRACE=1` 后查看 `~/.hil/trace.log`。
 - **`hil: command not found`** —— 重跑 `npm install -g hil-guardrail`，或用 `npx hil-guardrail`。
@@ -94,5 +97,5 @@ hil trust add react fastapi --category library
 ## 常见问题
 
 - **会拖慢智能体吗？** hook 本地毫秒级运行，无网络、无 LLM。HIL 出错时一律 fail-open——会话不受影响。
-- **会读我的对话吗？** 不会。它只看工具调用（命令、文件路径），且只存元数据。[详情](06-privacy-and-security.zh-CN.md)。
+- **会读我的对话吗？** 不会。它只看工具调用（命令、文件路径），且只存元数据。[详情](10-local-runtime.zh-CN.md)。
 - **会限制 AI 吗？** 绝不会。智能体可以使用和提议任何东西；HIL 只呈报越过*你声明的*边界的引入——允许与否永远是你的决定。

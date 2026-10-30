@@ -25,3 +25,7 @@ Thumbs.db
 
 # logs
 *.log
+
+# Local historical design notes (not published)
+/docs/0[1-8]-*.md
+/PROMPT_HIL.md
