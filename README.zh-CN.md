@@ -55,14 +55,18 @@ HIL 是一个本地后台运行的人机协作护栏。用户通过网页配置�
 
 ## 使用本地后台（0.2.0）
 
-需要 Node.js ≥ 22.13 和可正常使用的 Claude Code。以下命令在项目根目录执行。
+需要 Node.js ≥ 22.13、Git，以及可正常使用的 Claude Code。在终端进入你希望存放 HIL 的父目录，然后下载仓库并执行：
 
 ```powershell
+git clone https://github.com/Bdna6/HIL-Guardrail.git
+cd HIL-Guardrail
 npm install
 npm run build
 npm run hil -- install --scope user
 npm run hil -- start --port 4174
 ```
+
+也可以在 GitHub 点击 **Code → Download ZIP**，解压后在项目根目录（包含 `package.json` 的文件夹）打开终端，从 `npm install` 开始执行；这种方式不需要 Git。安装后请保留 HIL 文件夹，已安装的 hooks 会引用其中的构建文件。HIL 只需下载一次，即可供其他项目目录中的 Claude Code 会话使用。
 
 打开 **http://127.0.0.1:4174/local/dashboard**，可实际修改模式、开关与策略；关闭网页后后台继续运行。在 Claude Code 中直接询问“HIL 当前模式、是否启用及版本号”，由 hooks 提供真实状态。
 

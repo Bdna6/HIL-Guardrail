@@ -55,14 +55,18 @@ See the [documentation index](docs/README.md) for setup and adapter research. Cu
 
 ## Run the local runtime
 
-Requires Node.js ≥ 22.13 and working Claude Code. Run these commands from the project root.
+Requires Node.js ≥ 22.13, Git, and working Claude Code. In a terminal, choose a parent folder for HIL, then download the repository and run:
 
 ```powershell
+git clone https://github.com/Bdna6/HIL-Guardrail.git
+cd HIL-Guardrail
 npm install
 npm run build
 npm run hil -- install --scope user
 npm run hil -- start --port 4174
 ```
+
+Alternatively, use GitHub **Code → Download ZIP**, extract it, open a terminal in the extracted project folder (the folder containing `package.json`), and start from `npm install`; Git is not required for this option. Keep the HIL folder after installation: the installed hooks reference its compiled files. HIL only needs to be downloaded once; it can serve Claude Code sessions in other project folders.
 
 Open **http://127.0.0.1:4174/local/dashboard** for real mode, enablement and policy configuration. Ask Claude Code for HIL's mode, enabled state and version: native hooks supply authoritative facts on every user turn. Open a new Claude Code session after first installation; subsequent mode changes apply on the next user message, while disabling applies to subsequent tool events immediately.
 
