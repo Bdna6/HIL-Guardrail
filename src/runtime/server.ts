@@ -23,7 +23,7 @@ export async function serve(port = 4173) {
     '.css': 'text/css; charset=utf-8',
     '.svg': 'image/svg+xml',
   };
-  let hookQueue = Promise.resolve();
+  const hookQueues = new Map<string, Promise<void>>();
   async function body(req: IncomingMessage): Promise<unknown> {
     let text = '';
     for await (const chunk of req) {
@@ -74,11 +74,18 @@ export async function serve(port = 4173) {
             return;
           }
           let output = '';
-          const task = hookQueue.then(async () => {
-            output = await engine.handle(input);
+          const queuedAt = Date.now();
+          const sessionKey = typeof input.session_id === 'string' ? input.session_id : '';
+          const task = (hookQueues.get(sessionKey) ?? Promise.resolve()).then(async () => {
+            output = await engine.handle(input, Date.now() - queuedAt);
           });
-          hookQueue = task.catch(() => {});
-          await task;
+          const tail = task.catch(() => {});
+          hookQueues.set(sessionKey, tail);
+          try {
+            await task;
+          } finally {
+            if (hookQueues.get(sessionKey) === tail) hookQueues.delete(sessionKey);
+          }
           json(res, 200, { stdout: output });
           return;
         }

@@ -32,11 +32,20 @@ export interface RuntimeSession {
   revision: number;
   lastSeen: number;
   objective: string;
+  currentTask?: string;
+  latestUserPrompt?: string;
+  lastHook?: {
+    event: string;
+    totalMs: number;
+    semanticMs: number;
+    semanticCalls: number;
+    queueMs: number;
+  };
   studyDone: boolean;
   changed: boolean;
   pending?: Pending;
   acknowledged: string[];
-  lastAnswer?: 'model-reviewed' | 'user-responded-unverified';
+  lastAnswer?: 'model-reviewed' | 'user-responded-unverified' | 'user-authorized';
   warning?: string;
 }
 const context = (event: string, text: string) =>
@@ -67,6 +76,13 @@ export class RuntimeEngine {
   constructor(public config: RuntimeConfig) {
     this.sessions =
       readJson<Record<string, RuntimeSession>>(join(runtimeDir(), 'sessions.json')) ?? {};
+    // Older scope decisions used the initial prompt and omitted the latest task.
+    for (const session of Object.values(this.sessions)) {
+      if (session.currentTask === undefined && session.pending?.kind === 'scope') {
+        session.pending = undefined;
+        session.warning = undefined;
+      }
+    }
   }
   persist(): void {
     const cutoff = Date.now() - 48 * 3600_000;
@@ -91,6 +107,7 @@ export class RuntimeEngine {
         pending: s.pending?.kind,
         lastAnswer: s.lastAnswer,
         warning: s.warning,
+        lastHook: s.lastHook,
       })),
     };
   }
@@ -104,11 +121,11 @@ ${
     ? 'HIL interventions are disabled. Do not impose HIL learning or review checks.'
     : `Mode ${session.mode}. ${session.mode === 'build' ? 'Preserve the human objective and avoid unnecessary dependencies, cloud services, accounts or scope expansion. Explain simpler alternatives before consequential choices.' : session.mode === 'work' ? 'Before delivery, trace important facts to sources, disclose assumptions and ask the human to verify consequential results. Never label unverified claims as checked.' : 'Start with the learner’s attempt, then hints and partial explanations. Ask contextual prediction/transfer questions. Do not immediately deliver a complete solution. Evaluate the answer meaningfully in the original conversation; do not treat acknowledgment as understanding.'}
 Policies: ${JSON.stringify(p)}. ${p.scope ? 'Compare consequential changes with the task objective before proceeding.' : ''} ${p.handover ? 'Before finishing, summarize decisions and concrete verification/understanding checks.' : ''}
-Objective: ${JSON.stringify(c.goal || session.objective)}. ${session.pending ? `Outstanding checkpoint: ${JSON.stringify(session.pending.question)}. Ask this question and WAIT for the human. Do not retry denied tools or answer the challenge on their behalf.` : ''}
+Project goal (only if explicitly configured): ${JSON.stringify(c.goal)}. Current task: ${JSON.stringify(session.currentTask || session.objective)}. Latest user message: ${JSON.stringify(session.latestUserPrompt)}. The initial request is not a permanent restriction; honor subsequent explicit task changes. ${session.pending ? `Outstanding checkpoint: ${JSON.stringify(session.pending.question)}. Ask this question and WAIT for the human. Do not retry denied tools or answer the challenge on their behalf.` : ''}
 An allowed tool or user response is authorization, not proof of understanding. Semantic assessments are limited evidence, never a competence score.`
 }`;
   }
-  async handle(input: NativeInput): Promise<string> {
+  async handle(input: NativeInput, queueMs = 0): Promise<string> {
     if (typeof input.session_id !== 'string' || input.session_id.length > 200) return '';
     const id = input.session_id,
       event = input.hook_event_name ?? '',
@@ -135,6 +152,17 @@ An allowed tool or user response is authorization, not proof of understanding. S
       this.sessions[id] = s;
     }
     s.lastSeen = now;
+    const timing = { event, totalMs: 0, semanticMs: 0, semanticCalls: 0, queueMs };
+    const evaluate = async (evidence: Record<string, unknown>) => {
+      if (!semanticConfigured()) return undefined;
+      const started = Date.now();
+      timing.semanticCalls++;
+      try {
+        return await assess(evidence);
+      } finally {
+        timing.semanticMs += Date.now() - started;
+      }
+    };
     try {
       if (event === 'SessionStart' || event === 'UserPromptSubmit') {
         // Runtime facts refresh on user turns; global off is effective for every event.
@@ -148,24 +176,54 @@ An allowed tool or user response is authorization, not proof of understanding. S
         const prompt = input.prompt?.trim() ?? '';
         const statusOnly =
           /^(?:.*HIL.*(?:模式|状态|版本|开启|启动|mode|status|version|enabled).*)$/iu.test(prompt);
-        if (prompt && !s.objective && !statusOnly && !isLowInformation(prompt))
-          s.objective = prompt.slice(0, 1000);
+        const hadPending = Boolean(s.pending && this.config.enabled);
+        if (prompt && !statusOnly) {
+          s.latestUserPrompt = prompt.slice(0, 3000);
+          if (!hadPending && !isLowInformation(prompt)) {
+            if (!s.objective) s.objective = prompt.slice(0, 1000);
+            s.currentTask = prompt.slice(0, 3000);
+            s.studyDone = false;
+            s.acknowledged = [];
+            s.warning = undefined;
+          }
+        }
         if (event === 'UserPromptSubmit' && s.pending && this.config.enabled && !statusOnly) {
-          if (isLowInformation(prompt) || !prompt) {
-            s.warning = 'A substantive response is still needed.';
+          const authorization = s.pending.kind === 'scope' || s.pending.kind === 'resource';
+          const explicitApproval =
+            /^(?:确认|同意|允许|可以|继续|好的|好|没问题|yes|y|ok|okay|sure|go ahead|proceed|approve|approved|confirm|confirmed)[。.!！\s]*$/iu.test(
+              prompt,
+            );
+          if (authorization && explicitApproval) {
+            s.lastAnswer = 'user-authorized';
+            s.acknowledged = [...s.acknowledged.slice(-99), s.pending.key];
+            s.pending = undefined;
+            s.warning = undefined;
+          } else if (isLowInformation(prompt) || explicitApproval || !prompt) {
+            s.warning = authorization
+              ? 'Please explicitly approve or reject this operation.'
+              : 'A substantive response is still needed.';
           } else {
             try {
-              const result = await assess({
-                purpose: 'review-answer',
-                objective: this.config.goal || s.objective,
+              const result = await evaluate({
+                purpose: authorization ? 'authorization' : 'review-answer',
+                checkpointKind: s.pending.kind,
+                projectGoal: this.config.goal,
+                objective: s.currentTask || s.objective,
                 question: s.pending.question,
                 answer: prompt.slice(0, 3000),
               });
-              if (result && !result.understood) {
-                s.pending.question = result.question || s.pending.question;
-                s.warning = result.reason;
+              const accepted = authorization
+                ? result?.authorized === true
+                : !result || result.understood;
+              if (!accepted) {
+                s.pending.question = result?.question || s.pending.question;
+                s.warning = result?.reason || 'Please explicitly approve or reject this operation.';
               } else {
-                s.lastAnswer = result ? 'model-reviewed' : 'user-responded-unverified';
+                s.lastAnswer = authorization
+                  ? 'user-authorized'
+                  : result
+                    ? 'model-reviewed'
+                    : 'user-responded-unverified';
                 if (s.pending.kind === 'study') s.studyDone = true;
                 s.acknowledged.push(s.pending.key);
                 s.acknowledged = s.acknowledged.slice(-100);
@@ -204,7 +262,7 @@ An allowed tool or user response is authorization, not proof of understanding. S
           s.pending = {
             key,
             kind: 'study',
-            question: `在实现前，请先描述你的思路：准备怎样完成“${s.objective.slice(0, 150)}”？关键输入、输出与验证方法是什么？`,
+            question: `在实现前，请先描述你的思路：准备怎样完成“${(s.currentTask || s.objective).slice(0, 150)}”？关键输入、输出与验证方法是什么？`,
             at: now,
           };
           return deny(
@@ -216,7 +274,10 @@ An allowed tool or user response is authorization, not proof of understanding. S
           const relevant =
             signals.anchors.length > 0 ||
             signals.introductions.length > 0 ||
-            ['Write', 'Edit', 'MultiEdit'].includes(tool);
+            (/\.(?:[cm]?[jt]sx?|py|ya?ml|json|toml|tf)$/i.test(String(args.file_path ?? '')) &&
+              /https?:\/\/|connectToCloud|cloud|supabase|firebase|aws|azure|oauth|stripe|permission/i.test(
+                String(args.content ?? args.new_string ?? JSON.stringify(args.edits ?? '')),
+              ));
           if (relevant) {
             try {
               // Never send environment files or credential values to the optional assessor.
@@ -231,9 +292,11 @@ An allowed tool or user response is authorization, not proof of understanding. S
                       )
                       .slice(0, 6000),
                   };
-              const decision = await assess({
+              const decision = await evaluate({
                 purpose: 'scope',
-                objective: this.config.goal || s.objective,
+                projectGoal: this.config.goal,
+                objective: s.currentTask || s.objective,
+                latestUserPrompt: s.latestUserPrompt,
                 tool,
                 evidence,
               });
@@ -295,6 +358,8 @@ An allowed tool or user response is authorization, not proof of understanding. S
       }
       return '';
     } finally {
+      timing.totalMs = Date.now() - now + queueMs;
+      s.lastHook = timing;
       this.persist();
     }
   }
