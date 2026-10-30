@@ -55,18 +55,35 @@ See the [documentation index](docs/README.md) for setup and adapter research. Cu
 
 ## Run the local runtime
 
-Requires Node.js ≥ 22.13, Git, and working Claude Code. In a terminal, choose a parent folder for HIL, then download the repository and run:
+Requires Node.js ≥ 22.13 and working Claude Code.
+
+### Option 1: Clone the repository (recommended first choice)
+
+Install Git, open a terminal in a parent folder where you want to keep HIL, and run:
 
 ```powershell
 git clone https://github.com/Bdna6/HIL-Guardrail.git
 cd HIL-Guardrail
+```
+
+Cloning makes it easier to fetch future updates with Git.
+
+### Option 2: Download ZIP (recommended alternative)
+
+Without Git, choose **Code → Download ZIP** on GitHub, extract it, and open a terminal in the project root (the folder containing `package.json`).
+
+### Install and start (both options)
+
+From the project root, run:
+
+```powershell
 npm install
 npm run build
 npm run hil -- install --scope user
 npm run hil -- start --port 4174
 ```
 
-Alternatively, use GitHub **Code → Download ZIP**, extract it, open a terminal in the extracted project folder (the folder containing `package.json`), and start from `npm install`; Git is not required for this option. Keep the HIL folder after installation: the installed hooks reference its compiled files. HIL only needs to be downloaded once; it can serve Claude Code sessions in other project folders.
+Keep the HIL folder after installation: the installed hooks reference its compiled files. Download HIL once to serve Claude Code sessions in other project folders.
 
 Open **http://127.0.0.1:4174/local/dashboard** for real mode, enablement and policy configuration. Ask Claude Code for HIL's mode, enabled state and version: native hooks supply authoritative facts on every user turn. Open a new Claude Code session after first installation; subsequent mode changes apply on the next user message, while disabling applies to subsequent tool events immediately.
 
@@ -75,6 +92,22 @@ Default startup uses local rules and human checkpoints. Append `--semantic claud
 Use `npm run hil -- runtime status` or `npm run hil -- stop`. The local service does not require cloud authentication. `/demo/*` remains isolated fictional data; `npm run dashboard` still serves only the static frontend, normally on port 4173.
 
 See [the local runtime guide (Chinese)](docs/10-local-runtime.zh-CN.md) for CC Switch, semantic configuration, storage, limitations, and validation. Native Claude Code 2.1.92 status delivery and a GLM scope assessment were tested; a DeepSeek-native session has not been claimed as tested.
+
+## Uninstall or delete HIL
+
+Exit Claude Code sessions using HIL first. Keep the HIL installation folder and run these commands from its project root, in order:
+
+```powershell
+npm run hil -- stop
+npm run hil -- uninstall --scope user
+```
+
+This stops the background service and removes user-level HIL hooks and the `/hil` command, preserving other Claude Code plugins, hooks and model settings. Reopen Claude Code to continue without HIL.
+
+- If you also installed with `--scope project` or `--scope local`, uninstall each scope from each affected project's root. Run `npm run hil -- uninstall --scope project` or `--scope local` where HIL source is available; otherwise run `node "HIL-installation-folder/dist/interface/cli/main.js" uninstall --scope project` (or `local`), keeping the affected project as the working directory.
+- After stopping the service and removing every installed scope, delete the downloaded HIL folder in your file manager, including its `node_modules` and `dist` folders.
+- Uninstalling retains user data. To remove it too, optionally delete `.hil` in your user home (typically `C:\Users\your-name\.hil` on Windows), plus project `.hil` folders you created for HIL. This deletes their configuration, trust records, session data and logs; back up anything you want to keep.
+- If you configured `HIL_HOME`, use that same setting for stopping and uninstalling, and clean up that custom data directory instead. Browser demo data and appearance preferences can be cleared separately; they do not keep hooks installed.
 
 ## How HIL will participate in CLI work
 

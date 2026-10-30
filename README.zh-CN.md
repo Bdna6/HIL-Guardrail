@@ -55,18 +55,35 @@ HIL 是一个本地后台运行的人机协作护栏。用户通过网页配置�
 
 ## 使用本地后台（0.2.0）
 
-需要 Node.js ≥ 22.13、Git，以及可正常使用的 Claude Code。在终端进入你希望存放 HIL 的父目录，然后下载仓库并执行：
+需要 Node.js ≥ 22.13，以及可正常使用的 Claude Code。
+
+### 方式一：克隆仓库（首选推荐）
+
+安装 Git，在终端进入你希望存放 HIL 的父目录，然后执行：
 
 ```powershell
 git clone https://github.com/Bdna6/HIL-Guardrail.git
 cd HIL-Guardrail
+```
+
+克隆方式方便后续通过 Git 获取更新。
+
+### 方式二：下载 ZIP（备选推荐）
+
+不安装 Git 也可以使用：在 GitHub 点击 **Code → Download ZIP**，解压后在项目根目录（包含 `package.json` 的文件夹）打开终端。
+
+### 安装并启动（两种方式相同）
+
+在项目根目录执行：
+
+```powershell
 npm install
 npm run build
 npm run hil -- install --scope user
 npm run hil -- start --port 4174
 ```
 
-也可以在 GitHub 点击 **Code → Download ZIP**，解压后在项目根目录（包含 `package.json` 的文件夹）打开终端，从 `npm install` 开始执行；这种方式不需要 Git。安装后请保留 HIL 文件夹，已安装的 hooks 会引用其中的构建文件。HIL 只需下载一次，即可供其他项目目录中的 Claude Code 会话使用。
+安装后请保留 HIL 文件夹，已安装的 hooks 会引用其中的构建文件。HIL 只需下载一次，即可供其他项目目录中的 Claude Code 会话使用。
 
 打开 **http://127.0.0.1:4174/local/dashboard**，可实际修改模式、开关与策略；关闭网页后后台继续运行。在 Claude Code 中直接询问“HIL 当前模式、是否启用及版本号”，由 hooks 提供真实状态。
 
@@ -77,6 +94,22 @@ npm run hil -- start --port 4174
 - `npm run dashboard` 仍只启动静态 demo（默认 4173），不启动后台。
 
 完整流程、数据范围、CC Switch / DeepSeek、检查点边界和实测结果见 [本地后台使用说明](docs/10-local-runtime.zh-CN.md)。
+
+## 卸载或删除 HIL
+
+先退出正在使用 HIL 的 Claude Code 会话，保留 HIL 文件夹，在其项目根目录依次执行：
+
+```powershell
+npm run hil -- stop
+npm run hil -- uninstall --scope user
+```
+
+第一条命令停止后台，第二条移除用户级 HIL hooks 和 `/hil` 命令，保留 Claude Code 中其他插件、hooks 和模型配置。之后重新打开 Claude Code 即可继续使用，不再加载 HIL。
+
+- 如果曾使用 `--scope project` 或 `--scope local` 安装，还需在每个对应项目根目录执行 `npm run hil -- uninstall --scope project` 或 `--scope local`。若该目录没有 HIL 源码，可用 `node "HIL安装目录/dist/interface/cli/main.js" uninstall --scope project`（或 `local`），当前工作目录保持为对应项目。
+- 确认后台已停止、所有安装作用域已卸载后，可通过文件管理器删除下载的 HIL 文件夹，包括其中的 `node_modules` 和 `dist`。
+- 卸载默认保留用户数据。如需彻底清理，可另外删除用户主目录下的 `.hil` 文件夹（Windows 通常为 `C:\Users\你的用户名\.hil`），以及你确实为 HIL 创建的各项目 `.hil` 文件夹。这会删除对应配置、信任记录、会话数据和日志；需要保留时先备份。
+- 如果设置过 `HIL_HOME`，停止和卸载时使用相同设置，数据清理以该自定义目录为准。浏览器里的 demo 数据及外观偏好可另行清除，它们不影响 hooks 是否卸载。
 
 ## HIL 如何参与 CLI 工作
 
